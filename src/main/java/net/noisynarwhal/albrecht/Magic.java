@@ -30,6 +30,11 @@ public class Magic implements Comparable<Magic> {
     private final int hashCode;
     private final long serial = SERIAL_COUNTER.getAndIncrement();
 
+    /**
+     *
+     * @param order
+     * @return
+     */
     public static Magic generate(final int order) {
 
         final int[][] values = new int[order][order];
@@ -120,6 +125,10 @@ public class Magic implements Comparable<Magic> {
 
     }
 
+    /**
+     *
+     * @return
+     */
     public Magic newChild() {
 
         final int[][] childValues = Matrices.copy(this.values);
@@ -202,26 +211,50 @@ public class Magic implements Comparable<Magic> {
         return child;
     }
 
+    /**
+     *
+     * @return
+     */
     public int[][] getValues() {
         return Matrices.copy(this.values);
     }
 
+    /**
+     *
+     * @return
+     */
     public int getOrder() {
         return this.order;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getScore() {
         return this.score;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getMaxScore() {
         return this.maxScore;
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean isMagic() {
         return this.score == this.maxScore;
     }
 
+    /**
+     *
+     * @return
+     */
     public long getSerial() {
         return this.serial;
     }

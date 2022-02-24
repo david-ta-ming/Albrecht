@@ -40,6 +40,10 @@ public class Main {
     private static final String VERSION = "1.0.1";
     private static final int NUM_THREADS = Math.max(2, Runtime.getRuntime().availableProcessors() / 2);
 
+    /**
+     *
+     * @param args
+     */
     @SuppressWarnings("UseSpecificCatch")
     public static void main(String[] args) {
 

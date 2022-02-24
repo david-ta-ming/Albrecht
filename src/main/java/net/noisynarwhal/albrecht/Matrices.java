@@ -42,6 +42,11 @@ public class Matrices {
         return copy;
     }
 
+    /**
+     *
+     * @param square
+     * @return
+     */
     public static int[][] transpose(int[][] square) {
 
         final int[][] sq = Matrices.copy(square);
@@ -60,6 +65,11 @@ public class Matrices {
         return sq;
     }
 
+    /**
+     *
+     * @param square
+     * @return
+     */
     public static int[][] mirror(int[][] square) {
 
         final int[][] sq = Matrices.copy(square);
@@ -81,11 +91,22 @@ public class Matrices {
         return sq;
     }
 
+    /**
+     *
+     * @param square
+     * @return
+     */
     public static int[][] rotate(int[][] square) {
 
         return Matrices.mirror(Matrices.transpose(square));
     }
 
+    /**
+     *
+     * @param values
+     * @param out
+     * @throws IOException
+     */
     public static void print(int[][] values, Writer out) throws IOException {
 
         int maxVal = values[0][0];
@@ -135,6 +156,11 @@ public class Matrices {
         }
     }
 
+    /**
+     *
+     * @param values
+     * @return
+     */
     public static String print(int[][] values) {
 
         try {
@@ -153,6 +179,12 @@ public class Matrices {
         }
     }
 
+    /**
+     *
+     * @param values1
+     * @param values2
+     * @return
+     */
     public static boolean valuesEqual(int[][] values1, int[][] values2) {
 
         if (values1.length != values2.length) {
@@ -171,6 +203,11 @@ public class Matrices {
         return true;
     }
 
+    /**
+     *
+     * @param form
+     * @return
+     */
     public static int[][] standardize(int[][] form) {
 
         final SortedSet<int[][]> forms = new TreeSet<>(new Comparator<int[][]>() {

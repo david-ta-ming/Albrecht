@@ -16,10 +16,23 @@ import java.util.TreeSet;
  */
 public class Population {
 
+    /**
+     *
+     * @param order
+     * @param populationSize
+     * @return
+     */
     public static Magic evolve(int order, int populationSize) {
         return Population.evolve(order, populationSize, new DefaultPopulationMonitor());
     }
 
+    /**
+     *
+     * @param order
+     * @param populationSize
+     * @param monitor
+     * @return
+     */
     public static Magic evolve(int order, int populationSize, PopulationMonitor monitor) {
 
         final SortedSet<Magic> pop = new TreeSet<>();
@@ -53,12 +66,27 @@ public class Population {
         return pop.first();
     }
 
+    /**
+     *
+     */
     public static interface PopulationMonitor {
 
+        /**
+         *
+         * @return
+         */
         public boolean isFinished();
 
+        /**
+         *
+         * @param pop
+         */
         public void report(SortedSet<Magic> pop);
 
+        /**
+         *
+         * @param pop
+         */
         public void onFinish(SortedSet<Magic> pop);
     }
 
