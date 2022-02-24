@@ -22,6 +22,8 @@ public class Benchmark {
         final int order = 9;
         final int populationSize = 200;
         final int numTrials = 200;
+        
+        System.gc();
 
         final List<Long> times = new ArrayList<>();
 

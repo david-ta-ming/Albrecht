@@ -37,6 +37,7 @@ import org.apache.commons.cli.Options;
  */
 public class Main {
 
+    private static final String VERSION = "1.0.1";
     private static final int NUM_THREADS = Math.max(2, Runtime.getRuntime().availableProcessors() / 2);
 
     @SuppressWarnings("UseSpecificCatch")
@@ -83,6 +84,8 @@ public class Main {
         Magic magic = null;
 
         System.out.println("\n\n");
+        System.out.println("Version " + VERSION);
+        System.out.println("Searching...");
         System.out.println(new Date());
         System.out.println("Searching...");
         System.out.println("Order: " + Integer.toString(order));

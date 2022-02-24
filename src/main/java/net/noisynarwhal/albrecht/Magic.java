@@ -19,6 +19,7 @@ import java.util.concurrent.atomic.AtomicLong;
  */
 public class Magic implements Comparable<Magic> {
 
+    private static final int EXHANGE_PROB_SPACE = 20;
     private static final AtomicLong SERIAL_COUNTER = new AtomicLong(0);
 
     private final Random RANDOM = ThreadLocalRandom.current();
@@ -120,26 +121,81 @@ public class Magic implements Comparable<Magic> {
     }
 
     public Magic newChild() {
+
         final int[][] childValues = Matrices.copy(this.values);
 
-        int r1;
-        int c1;
-        int r2;
-        int c2;
+        final int exchangeType = RANDOM.nextInt(EXHANGE_PROB_SPACE);
 
-        do {
-            r1 = RANDOM.nextInt(this.order);
-            c1 = RANDOM.nextInt(this.order);
+        switch (exchangeType) {
 
-            r2 = RANDOM.nextInt(this.order);
-            c2 = RANDOM.nextInt(this.order);
+            case 0: {
+                /**
+                 * Row exchange
+                 */
+                int r1;
+                int r2;
 
-        } while (r1 == r2 && c1 == c2);
+                do {
+                    r1 = RANDOM.nextInt(this.order);
+                    r2 = RANDOM.nextInt(this.order);
+                } while (r1 == r2);
 
-        final int v2 = childValues[r2][c2];
+                final int[] valsR2 = new int[this.order];
+                System.arraycopy(childValues[r2], 0, valsR2, 0, this.order);
 
-        childValues[r2][c2] = childValues[r1][c1];
-        childValues[r1][c1] = v2;
+                childValues[r2] = childValues[r1];
+                childValues[r1] = valsR2;
+
+                break;
+            }
+
+            case 1: {
+                /**
+                 * Col exchange
+                 */
+                int c1;
+                int c2;
+
+                do {
+                    c1 = RANDOM.nextInt(this.order);
+                    c2 = RANDOM.nextInt(this.order);
+                } while (c1 == c2);
+
+                for (int r = 0; r < this.order; r++) {
+
+                    final int v2 = childValues[r][c2];
+
+                    childValues[r][c2] = childValues[r][c1];
+                    childValues[r][c1] = v2;
+
+                }
+
+                break;
+            }
+
+            default: {
+                /**
+                 * Value exchange
+                 */
+                int r1;
+                int c1;
+                int r2;
+                int c2;
+                do {
+                    r1 = RANDOM.nextInt(this.order);
+                    c1 = RANDOM.nextInt(this.order);
+
+                    r2 = RANDOM.nextInt(this.order);
+                    c2 = RANDOM.nextInt(this.order);
+
+                } while (r1 == r2 && c1 == c2);
+
+                final int v2 = childValues[r2][c2];
+
+                childValues[r2][c2] = childValues[r1][c1];
+                childValues[r1][c1] = v2;
+            }
+        }
 
         final Magic child = new Magic(childValues);
 
