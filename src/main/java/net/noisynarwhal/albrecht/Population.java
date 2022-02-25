@@ -30,17 +30,17 @@ public class Population {
      *
      * @param order
      * @param populationSize
-     * @param monitor
+     * @param manager
      * @return
      */
-    public static Magic evolve(int order, int populationSize, PopulationMonitor monitor) {
+    public static Magic evolve(int order, int populationSize, PopulationManager manager) {
 
         final SortedSet<Magic> pop = new TreeSet<>();
         while (pop.size() < populationSize) {
             pop.add(Magic.generate(order));
         }
 
-        while (!(pop.first().isMagic() || monitor.isFinished())) {
+        while (!(pop.first().isMagic() || manager.isFinished())) {
 
             final Iterator<Magic> it = new ArrayList<>(pop).iterator();
             while (it.hasNext()) {
@@ -57,11 +57,11 @@ public class Population {
                 it.remove();
             }
 
-            monitor.report(pop);
+            manager.report(pop);
 
         }
 
-        monitor.onFinish(pop);
+        manager.onFinish(pop);
 
         return pop.first();
     }
@@ -69,7 +69,7 @@ public class Population {
     /**
      *
      */
-    public static interface PopulationMonitor {
+    public static interface PopulationManager {
 
         /**
          *
@@ -90,7 +90,7 @@ public class Population {
         public void onFinish(SortedSet<Magic> pop);
     }
 
-    private static class DefaultPopulationMonitor implements PopulationMonitor {
+    private static class DefaultPopulationMonitor implements PopulationManager {
 
         @Override
         public boolean isFinished() {
