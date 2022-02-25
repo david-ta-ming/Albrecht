@@ -29,12 +29,15 @@ public class Matrices {
 
         final int[][] copy = new int[values.length][];
 
+        int len;
+        int[] rowCopy;
         for (int r = 0; r < values.length; r++) {
 
-            final int[] rowSrc = values[r];
-            final int[] rowCopy = new int[rowSrc.length];
+            len = values[r].length;
 
-            System.arraycopy(rowSrc, 0, rowCopy, 0, rowSrc.length);
+            rowCopy = new int[len];
+
+            System.arraycopy(values[r], 0, rowCopy, 0, len);
 
             copy[r] = rowCopy;
         }
