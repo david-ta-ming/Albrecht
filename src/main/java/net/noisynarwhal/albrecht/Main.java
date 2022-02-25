@@ -24,12 +24,12 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
-import net.noisynarwhal.albrecht.Population.PopulationMonitor;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
+import net.noisynarwhal.albrecht.Population.PopulationManager;
 
 /**
  *
@@ -191,7 +191,7 @@ public class Main {
         System.out.println("Elapsed: " + Main.timeMessage(elapsed, TimeUnit.NANOSECONDS));
     }
 
-    private static class EvolutionManager implements Callable<Magic>, PopulationMonitor {
+    private static class EvolutionManager implements Callable<Magic>, PopulationManager {
 
         private static final AtomicBoolean MAGIC_FOUND = new AtomicBoolean(false);
         private static final AtomicInteger HIGH_SCORE = new AtomicInteger(Integer.MIN_VALUE);
