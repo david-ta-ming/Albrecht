@@ -52,7 +52,7 @@ public class Main {
         options.addOption(new Option("o", "order", true, "Magic square order"));
         options.addOption(new Option("d", "dir", true, "Output directory"));
         options.addOption(new Option("p", "pop", true, "Size of population"));
-        options.addOption(new Option("r", "report", true, "Report frequence in seconds"));
+        options.addOption(new Option("r", "report", true, "Report frequency in seconds"));
 
         try {
 
