@@ -27,8 +27,8 @@ public class Benchmark {
      */
     public static void main(String[] args) {
         
-        final int order = 30;
-        final int populationSize = 25;
+        final int order = 9;
+        final int populationSize = 200;
         final int numTrials = 500;
         
         System.gc();
