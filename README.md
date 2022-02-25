@@ -9,7 +9,7 @@ Albrecht utilizes an evoluionary algorithm to generate magic squares.
 ```bash
 # execute inside Albrecht project directory
 mvn clean install
-# generate default magic square of order 30
+# generate default magic square of order 15
 java -jar target/albrecht.jar 
 ```
 
