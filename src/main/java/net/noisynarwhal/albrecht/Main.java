@@ -63,7 +63,7 @@ public class Main {
                 System.exit(0);
             }
 
-            final int order = line.hasOption("order") ? Integer.parseInt(line.getOptionValue("order")) : 30;
+            final int order = line.hasOption("order") ? Integer.parseInt(line.getOptionValue("order")) : 15;
             final File saveDir = line.hasOption("dir") ? new File(line.getOptionValue("dir")) : new File(System.getProperty("user.dir"));
             final int populationSize = line.hasOption("pop") ? Integer.parseInt(line.getOptionValue("pop")) : 25;
             final int reportSecs = line.hasOption("report") ? Integer.parseInt(line.getOptionValue("report")) : -1;
