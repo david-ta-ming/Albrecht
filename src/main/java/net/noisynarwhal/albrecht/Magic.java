@@ -19,7 +19,7 @@ import java.util.concurrent.atomic.AtomicLong;
  */
 public class Magic implements Comparable<Magic> {
 
-    private static final int EXHANGE_PROB_SPACE = 20;
+    private static final int EXCHANGE_RANDOM_SPACE = 15;
     private static final AtomicLong SERIAL_COUNTER = new AtomicLong(0);
 
     private final Random RANDOM = ThreadLocalRandom.current();
@@ -76,16 +76,18 @@ public class Magic implements Comparable<Magic> {
          * Score of right-to-left diagonal
          */
         int sumrl = 0;
+        /**
+         * Score of rows
+         */
+        int sumRow = 0;
+        /**
+         * Score of cols
+         */
+        int sumCol = 0;
         for (int i = 0; i < this.order; i++) {
 
-            /**
-             * Score of rows
-             */
-            int sumRow = 0;
-            /**
-             * Score of cols
-             */
-            int sumCol = 0;
+            sumRow = 0;
+            sumCol = 0;
 
             for (int j = 0; j < this.order; j++) {
                 sumRow += this.values[i][j];
@@ -117,12 +119,7 @@ public class Magic implements Comparable<Magic> {
 
         this.maxScore = this.order + this.order + 2;
 
-        if (scoreSum == this.maxScore - 1) {
-            this.score = -1;
-        } else {
-            this.score = scoreSum;
-        }
-
+        this.score = scoreSum;
     }
 
     /**
@@ -133,7 +130,7 @@ public class Magic implements Comparable<Magic> {
 
         final int[][] childValues = Matrices.copy(this.values);
 
-        final int exchangeType = RANDOM.nextInt(EXHANGE_PROB_SPACE);
+        final int exchangeType = RANDOM.nextInt(EXCHANGE_RANDOM_SPACE);
 
         switch (exchangeType) {
 
