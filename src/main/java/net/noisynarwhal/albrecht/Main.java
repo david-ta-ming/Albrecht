@@ -37,7 +37,7 @@ import net.noisynarwhal.albrecht.Population.PopulationManager;
  */
 public class Main {
 
-    private static final String VERSION = "1.0.2";
+    private static final String VERSION = "1.0.3";
     private static final int NUM_THREADS = Math.max(2, Runtime.getRuntime().availableProcessors() / 2);
 
     /**
@@ -216,6 +216,10 @@ public class Main {
                 System.err.print(th);
                 throw th;
             }
+        }
+
+        @Override
+        public void onStart(SortedSet<Magic> pop) {
         }
 
         @Override
