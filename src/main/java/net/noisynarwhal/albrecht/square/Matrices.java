@@ -5,11 +5,15 @@
  */
 package net.noisynarwhal.albrecht.square;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.io.Reader;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -167,16 +171,19 @@ public class Matrices {
     public static String print(int[][] values) {
 
         try {
+
             final StringWriter writer = new StringWriter();
+
             Matrices.print(values, writer);
 
             /**
              * Remove last newline
              */
             return writer.toString();
+
         } catch (IOException ex) {
             /**
-             * SHiould not happen with StringWriter
+             * Should not happen with StringWriter
              */
             throw new RuntimeException(ex);
         }
@@ -207,12 +214,18 @@ public class Matrices {
     }
 
     /**
+     * Return a matrix in Frénicle standard form
      *
+     * @see https://en.wikipedia.org/wiki/Fr%C3%A9nicle_standard_form
      * @param form
      * @return
      */
     public static int[][] standardize(int[][] form) {
 
+        /**
+         * A sorted set based on integer comparisons starting with the
+         * upper-left then proceeding left-to-right and up-to-down.
+         */
         final SortedSet<int[][]> forms = new TreeSet<>(new Comparator<int[][]>() {
             @Override
             public int compare(int[][] mtrx1, int[][] mtrx2) {
@@ -230,6 +243,10 @@ public class Matrices {
             }
         });
 
+        /**
+         * Add the 8 forms of this matrix: the original + its 3 rotations, then
+         * the mirror of the original + its 3 rotations.
+         */
         forms.add(form);
 
         for (int i = 0; i < 3; i++) {
@@ -245,6 +262,52 @@ public class Matrices {
             forms.add(form);
         }
 
+        /**
+         * Return the lowest ranked form from the sorted set, as the Frénicle
+         * standard form
+         */
         return forms.first();
+    }
+
+    /**
+     * Parse a white-space delimited matrix of integers
+     *
+     * @param in
+     * @return
+     * @throws IOException
+     */
+    public static int[][] read(final Reader in) throws IOException {
+
+        final int[][] matrix;
+
+        final List<int[]> rows = new ArrayList<>();
+
+        try (final BufferedReader reader = (in instanceof BufferedReader) ? (BufferedReader) in : new BufferedReader(in)) {
+
+            String line;
+            while ((line = reader.readLine()) != null) {
+
+                line = line.trim();
+                final String[] vals = line.split("\\s+");
+
+                final int[] row = new int[vals.length];
+                for (int i = 0; i < vals.length; i++) {
+                    row[i] = Integer.parseInt(vals[i]);
+                }
+
+                rows.add(row);
+
+            }
+
+        }
+
+        matrix = new int[rows.size()][];
+
+        int i = 0;
+        for (final int[] row : rows) {
+            matrix[i++] = row;
+        }
+
+        return matrix;
     }
 }
