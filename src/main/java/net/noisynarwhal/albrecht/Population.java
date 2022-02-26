@@ -35,35 +35,37 @@ public class Population {
      */
     public static Magic evolve(int order, int populationSize, PopulationManager manager) {
 
-        final SortedSet<Magic> pop = new TreeSet<>();
-        while (pop.size() < populationSize) {
-            pop.add(Magic.generate(order));
+        final SortedSet<Magic> population = new TreeSet<>();
+
+        while (population.size() < populationSize) {
+            population.add(Magic.generate(order));
         }
+        
+        manager.onStart(population);
 
-        while (!(pop.first().isMagic() || manager.isFinished())) {
+        while (!(population.first().isMagic() || manager.isFinished())) {
 
-            final Iterator<Magic> it = new ArrayList<>(pop).iterator();
+            final Iterator<Magic> it = new ArrayList<>(population).iterator();
             while (it.hasNext()) {
 
                 final Magic parent = it.next();
                 final Magic child = parent.newChild();
 
-                final Magic last = pop.last();
+                final Magic last = population.last();
 
-                if (child.compareTo(last) < 0 && pop.add(child)) {
-                    pop.remove(last);
+                if (child.compareTo(last) < 0 && population.add(child)) {
+                    population.remove(last);
                 }
 
-                it.remove();
             }
 
-            manager.report(pop);
+            manager.report(population);
 
         }
 
-        manager.onFinish(pop);
+        manager.onFinish(population);
 
-        return pop.first();
+        return population.first();
     }
 
     /**
@@ -76,6 +78,12 @@ public class Population {
          * @return
          */
         public boolean isFinished();
+
+        /**
+         *
+         * @param pop
+         */
+        public void onStart(SortedSet<Magic> pop);
 
         /**
          *
@@ -95,6 +103,10 @@ public class Population {
         @Override
         public boolean isFinished() {
             return false;
+        }
+
+        @Override
+        public void onStart(SortedSet<Magic> pop) {
         }
 
         @Override
