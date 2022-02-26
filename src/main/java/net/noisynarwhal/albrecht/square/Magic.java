@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package net.noisynarwhal.albrecht;
+package net.noisynarwhal.albrecht.square;
 
+import net.noisynarwhal.albrecht.square.Matrices;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;

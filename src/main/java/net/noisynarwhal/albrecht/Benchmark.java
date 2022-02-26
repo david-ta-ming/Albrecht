@@ -3,14 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package net.noisynarwhal.albrecht.benchmark;
+package net.noisynarwhal.albrecht;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-import net.noisynarwhal.albrecht.Population;
+import net.noisynarwhal.albrecht.square.Population;
 
 /**
  * Benchmark evolution times

@@ -1,10 +1,13 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
+ * To change this license error, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
 package net.noisynarwhal.albrecht;
 
+import net.noisynarwhal.albrecht.square.Population;
+import net.noisynarwhal.albrecht.square.Magic;
+import net.noisynarwhal.albrecht.square.Matrices;
 import com.google.common.hash.Hasher;
 import com.google.common.hash.Hashing;
 import java.io.File;
@@ -29,7 +32,7 @@ import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
-import net.noisynarwhal.albrecht.Population.PopulationManager;
+import net.noisynarwhal.albrecht.square.Population.PopulationManager;
 
 /**
  *
@@ -75,8 +78,9 @@ public class Main {
             Main.run(order, saveDir, populationSize, reportSecs);
 
         } catch (Throwable th) {
-            System.err.println(th.getMessage());
-            new HelpFormatter().printHelp(Main.class.getName(), options);
+
+            final String error = th.getMessage();
+            new HelpFormatter().printHelp(Main.class.getName(), "", options, error);
             System.exit(1);
         }
 
