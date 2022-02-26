@@ -288,15 +288,20 @@ public class Matrices {
             while ((line = reader.readLine()) != null) {
 
                 line = line.trim();
-                final String[] vals = line.split("\\s+");
+                
+                if (!line.isEmpty()) {
+                    
+                    final String[] vals = line.split("\\s+");
 
-                final int[] row = new int[vals.length];
-                for (int i = 0; i < vals.length; i++) {
-                    row[i] = Integer.parseInt(vals[i]);
+                    final int[] row = new int[vals.length];
+                    for (int i = 0; i < vals.length; i++) {
+                        row[i] = Integer.parseInt(vals[i]);
+                    }
+
+                    rows.add(row);
+                    
                 }
-
-                rows.add(row);
-
+                
             }
 
         }
