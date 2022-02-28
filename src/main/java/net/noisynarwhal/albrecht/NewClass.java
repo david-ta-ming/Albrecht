@@ -45,19 +45,21 @@ public class NewClass {
 
             matrix = Matrices.standardize(matrix);
 
-            final Magic m = Magic.generate(matrix);
-            if (m.isMagic()) {
+            final Magic m = Magic.build(matrix);
+            if (Matrices.isMagic(m.getValues())) {
 
                 final File fout = NewClass.saveResults(matrix, dir);
 
                 System.out.println("Out: " + fout.getAbsolutePath());
 
                 if (!fin.getName().equalsIgnoreCase(fout.getName())) {
+                    System.err.println("Deleting original: " + fin.getAbsolutePath());
+                    Thread.sleep(1000);
                     fin.delete();
                 }
             } else {
-                System.out.println("\n*** Not magic: " + fin.getAbsolutePath() + " ***\n");
-                Thread.sleep(3000);
+                System.err.println("\n*** Not magic: " + fin.getAbsolutePath() + " ***\n");
+                Thread.sleep(1000);
                 fin.delete();
             }
         }

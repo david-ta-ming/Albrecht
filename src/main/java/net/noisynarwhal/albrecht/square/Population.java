@@ -40,7 +40,7 @@ public class Population {
         while (population.size() < populationSize) {
             population.add(Magic.build(order));
         }
-        
+
         manager.onStart(population);
 
         while (!(population.first().isMagic() || manager.isFinished())) {
@@ -50,17 +50,14 @@ public class Population {
 
                 final Magic parent = it.next();
                 final Magic child = parent.newChild();
-
                 final Magic last = population.last();
 
                 if (child.compareTo(last) < 0 && population.add(child)) {
                     population.remove(last);
-                }
-
+                } 
             }
 
             manager.report(population);
-
         }
 
         manager.onFinish(population);

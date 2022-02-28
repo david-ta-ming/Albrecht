@@ -10,6 +10,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import net.noisynarwhal.albrecht.square.Magic;
+import net.noisynarwhal.albrecht.square.Matrices;
 import net.noisynarwhal.albrecht.square.Population;
 
 /**
@@ -37,30 +39,33 @@ public class Benchmark {
 
         for (int i = 0; i < numTrials; i++) {
 
+            final Magic magic;
             final long start = System.nanoTime();
 
-            Population.evolve(order, populationSize);
+            magic = Population.evolve(order, populationSize);
 
             final long elapsed = System.nanoTime() - start;
 
+            if (!Matrices.isMagic(magic.getValues())) {
+                System.out.println("Not magic: ");
+                System.out.println(Matrices.print(magic.getValues()));
+                break;
+            }
+
             times.add(elapsed);
 
-            final long elapsedSecs = TimeUnit.SECONDS.convert(elapsed, TimeUnit.NANOSECONDS);
-            if (elapsedSecs > 0) {
-                System.out.println(Integer.toString(i) + ": " + Long.toString(elapsedSecs) + " secs");
-            } else {
-                final long elapsedMs = TimeUnit.MILLISECONDS.convert(elapsed, TimeUnit.NANOSECONDS);
-                final long stars = (elapsedMs / 50) + 1;
-                final StringBuilder sb = new StringBuilder();
-                for (int j = 1; j <= stars; j++) {
-                    if (j % 3 == 0) {
-                        sb.append('#');
-                    } else {
-                        sb.append('*');
-                    }
+            final long elapsedMs = TimeUnit.MILLISECONDS.convert(elapsed, TimeUnit.NANOSECONDS);
+            final long stars = (elapsedMs / 50) + 1;
+            final StringBuilder sb = new StringBuilder();
+
+            for (int j = 1; j <= stars; j++) {
+                if (j % 3 == 0) {
+                    sb.append(Integer.toString(j));
+                } else {
+                    sb.append('*');
                 }
-                System.out.println(Integer.toString(i) + ": " + sb.toString());
             }
+            System.out.println(Integer.toString(i) + ": " + sb.toString());
 
         }
 

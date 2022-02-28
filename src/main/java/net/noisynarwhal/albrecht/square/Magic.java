@@ -19,7 +19,7 @@ import java.util.concurrent.atomic.AtomicLong;
  */
 public class Magic implements Comparable<Magic> {
 
-    private static final int EXCHANGE_RANDOM_SPACE = 75;
+    private static final int EXCHANGE_RANDOM_SPACE = 80;
     private static final AtomicLong SERIAL_COUNTER = new AtomicLong(0);
 
     private final Random RANDOM = ThreadLocalRandom.current();
@@ -61,10 +61,18 @@ public class Magic implements Comparable<Magic> {
         return new Magic(values);
     }
 
+    /**
+     * Instantiates a new Magic instance. The passed values are defensively
+     * copied prior to returning the new instance; subsequent modifications to
+     * the passed int[][] are safe from instance side-affects.
+     *
+     * @param values
+     * @return
+     */
     public static Magic build(int[][] values) {
 
         values = Matrices.copy(values);
-        
+
         for (final int[] row : values) {
             if (row.length != values.length) {
                 throw new IllegalArgumentException("Matrix is not an n*n square");
@@ -74,6 +82,16 @@ public class Magic implements Comparable<Magic> {
         return new Magic(values);
     }
 
+    /**
+     * Instantiates a new Magic instance. This instance maintains a reference to
+     * the passed int[][] value for performance reasons. Modifying this value
+     * subsequently will have side affects on this instance. This constructor is
+     * marked private mostly for this reason. Use the
+     * {@link net.noisynarwhal.albrecht.square.Magic#build(int[][])} to
+     * instantiate a new instance using a copy of the passed values matrix.
+     *
+     * @param values
+     */
     private Magic(int[][] values) {
 
         this.values = values;
@@ -232,8 +250,10 @@ public class Magic implements Comparable<Magic> {
     }
 
     /**
+     * Retrieves a copy of this Magic instance matrix values. Modifications to
+     * the returned int[][] will not affect the instance.
      *
-     * @return
+     * @return an int[][] copy of this instance's values
      */
     public int[][] getValues() {
         return Matrices.copy(this.values);
@@ -261,6 +281,14 @@ public class Magic implements Comparable<Magic> {
      */
     public int getMaxScore() {
         return this.maxScore;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public boolean isSemiMagic() {
+        return this.isSemiMagic;
     }
 
     /**
@@ -312,7 +340,7 @@ public class Magic implements Comparable<Magic> {
         } else if (this.score != other.score) {
             rank = other.score - this.score;
         } else {
-            rank = (other.serial < this.serial) ? -1 : 1;
+            rank = (other.serial < this.serial) ? -1 : +1;
         }
 
         return rank;

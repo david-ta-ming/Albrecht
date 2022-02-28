@@ -40,7 +40,7 @@ import net.noisynarwhal.albrecht.square.Population.PopulationManager;
  */
 public class Main {
 
-    private static final String VERSION = "1.1.0";
+    private static final String VERSION = "1.2.0";
     private static final int NUM_THREADS = Math.max(2, Runtime.getRuntime().availableProcessors() / 2);
 
     /**
@@ -262,7 +262,6 @@ public class Main {
         public void onFinish(SortedSet<Magic> pop) {
 
             MAGIC_FOUND.compareAndSet(false, true);
-            System.gc();
         }
 
     }
