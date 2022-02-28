@@ -288,9 +288,9 @@ public class Matrices {
             while ((line = reader.readLine()) != null) {
 
                 line = line.trim();
-                
+
                 if (!line.isEmpty()) {
-                    
+
                     final String[] vals = line.split("\\s+");
 
                     final int[] row = new int[vals.length];
@@ -299,9 +299,9 @@ public class Matrices {
                     }
 
                     rows.add(row);
-                    
+
                 }
-                
+
             }
 
         }
@@ -314,5 +314,69 @@ public class Matrices {
         }
 
         return matrix;
+    }
+
+    /**
+     * A manual verification that a matrix is a magic square. This is not needed
+     * (or used) by the class {@link net.noisynarwhal.albrecht.square.Magic}.
+     * The Magic class uses a more optimized version of this method
+     * implementation. Rather, this method serves as an alternative way to
+     * double-check results.
+     *
+     * @param matrix
+     * @return
+     */
+    public static boolean isMagic(int[][] matrix) {
+
+        for (final int[] row : matrix) {
+            if (row.length != matrix.length) {
+                throw new IllegalArgumentException("Matrix is not an n*n square");
+            }
+        }
+
+        final int order = matrix.length;
+        final int magicSum = order * (order * order + 1) / 2;
+
+        for (final int[] row : matrix) {
+            int sumRow = 0;
+            for (int c = 0; c < row.length; c++) {
+                sumRow += row[c];
+            }
+            if (magicSum != sumRow) {
+                return false;
+            }
+        }
+
+        for (int c = 0; c < order; c++) {
+            int sumCol = 0;
+            for (int r = 0; r < order; r++) {
+                sumCol += matrix[r][c];
+            }
+            if (magicSum != sumCol) {
+                return false;
+            }
+        }
+
+        {
+            int sumrl = 0;
+            for (int i = 0; i < order; i++) {
+                sumrl += matrix[i][i];
+            }
+            if (magicSum != sumrl) {
+                return false;
+            }
+        }
+
+        {
+            int sumlr = 0;
+            for (int i = 0; i < order; i++) {
+                sumlr += matrix[i][order - 1 - i];
+            }
+            if (magicSum != sumlr) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }
