@@ -38,7 +38,7 @@ public class Population {
         final SortedSet<Magic> population = new TreeSet<>();
 
         while (population.size() < populationSize) {
-            population.add(Magic.generate(order));
+            population.add(Magic.build(order));
         }
         
         manager.onStart(population);
