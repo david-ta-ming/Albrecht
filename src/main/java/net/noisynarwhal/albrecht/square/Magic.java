@@ -5,7 +5,6 @@
  */
 package net.noisynarwhal.albrecht.square;
 
-import net.noisynarwhal.albrecht.square.Matrices;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -20,7 +19,7 @@ import java.util.concurrent.atomic.AtomicLong;
  */
 public class Magic implements Comparable<Magic> {
 
-    private static final int EXCHANGE_RANDOM_SPACE = 15;
+    private static final int EXCHANGE_RANDOM_SPACE = 75;
     private static final AtomicLong SERIAL_COUNTER = new AtomicLong(0);
 
     private final Random RANDOM = ThreadLocalRandom.current();
@@ -29,6 +28,8 @@ public class Magic implements Comparable<Magic> {
     private final int score;
     private final int maxScore;
     private final int hashCode;
+    private final boolean isSemiMagic;
+    private final boolean isMagic;
     private final long serial = SERIAL_COUNTER.getAndIncrement();
 
     /**
@@ -60,6 +61,11 @@ public class Magic implements Comparable<Magic> {
         return new Magic(values);
     }
 
+    public static Magic generate(int[][] values) {
+
+        return new Magic(Matrices.copy(values));
+    }
+
     private Magic(int[][] values) {
 
         this.values = values;
@@ -77,18 +83,16 @@ public class Magic implements Comparable<Magic> {
          * Score of right-to-left diagonal
          */
         int sumrl = 0;
-        /**
-         * Score of rows
-         */
-        int sumRow = 0;
-        /**
-         * Score of cols
-         */
-        int sumCol = 0;
-        for (int i = 0; i < this.order; i++) {
 
-            sumRow = 0;
-            sumCol = 0;
+        for (int i = 0; i < this.order; i++) {
+            /**
+             * Score of rows
+             */
+            int sumRow = 0;
+            /**
+             * Score of cols
+             */
+            int sumCol = 0;
 
             for (int j = 0; j < this.order; j++) {
                 sumRow += this.values[i][j];
@@ -108,19 +112,29 @@ public class Magic implements Comparable<Magic> {
             sumlr += this.values[i][i];
             sumrl += this.values[i][this.order - 1 - i];
 
-            if (magicSum == sumlr) {
-                scoreSum++;
-            }
-            if (magicSum == sumrl) {
-                scoreSum++;
-            }
+        }
+
+        this.maxScore = this.order + this.order + 2;
+
+        this.isSemiMagic = scoreSum == this.maxScore - 2;
+
+        if (magicSum == sumlr) {
+            scoreSum++;
+        }
+        if (magicSum == sumrl) {
+            scoreSum++;
         }
 
         this.hashCode = hash;
 
-        this.maxScore = this.order + this.order + 2;
+        this.isMagic = scoreSum == this.maxScore;
 
-        this.score = scoreSum;
+        if (scoreSum == this.maxScore - 1) {
+            this.score = - 1;
+        } else {
+            this.score = scoreSum;
+        }
+
     }
 
     /**
@@ -130,8 +144,8 @@ public class Magic implements Comparable<Magic> {
     public Magic newChild() {
 
         final int[][] childValues = Matrices.copy(this.values);
-
-        final int exchangeType = RANDOM.nextInt(EXCHANGE_RANDOM_SPACE);
+        
+        final int exchangeType = this.isSemiMagic ? RANDOM.nextInt(2) : RANDOM.nextInt(EXCHANGE_RANDOM_SPACE);
 
         switch (exchangeType) {
 
@@ -246,7 +260,7 @@ public class Magic implements Comparable<Magic> {
      * @return
      */
     public boolean isMagic() {
-        return this.score == this.maxScore;
+        return this.isMagic;
     }
 
     /**

@@ -50,7 +50,16 @@ public class Benchmark {
                 System.out.println(Integer.toString(i) + ": " + Long.toString(elapsedSecs) + " secs");
             } else {
                 final long elapsedMs = TimeUnit.MILLISECONDS.convert(elapsed, TimeUnit.NANOSECONDS);
-                System.out.println(Integer.toString(i) + ": " + Long.toString(elapsedMs) + " ms");
+                final long stars = (elapsedMs / 50) + 1;
+                final StringBuilder sb = new StringBuilder();
+                for (int j = 1; j <= stars; j++) {
+                    if (j % 3 == 0) {
+                        sb.append('#');
+                    } else {
+                        sb.append('*');
+                    }
+                }
+                System.out.println(Integer.toString(i) + ": " + sb.toString());
             }
 
         }
