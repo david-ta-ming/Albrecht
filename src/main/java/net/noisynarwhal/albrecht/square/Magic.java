@@ -37,7 +37,7 @@ public class Magic implements Comparable<Magic> {
      * @param order
      * @return
      */
-    public static Magic generate(final int order) {
+    public static Magic build(final int order) {
 
         final int[][] values = new int[order][order];
 
@@ -61,9 +61,17 @@ public class Magic implements Comparable<Magic> {
         return new Magic(values);
     }
 
-    public static Magic generate(int[][] values) {
+    public static Magic build(int[][] values) {
 
-        return new Magic(Matrices.copy(values));
+        values = Matrices.copy(values);
+        
+        for (int i = 0; i < values.length; i++) {
+            if (values[i].length != values.length) {
+                throw new IllegalArgumentException("Matrix is not an n*n square");
+            }
+        }
+
+        return new Magic(values);
     }
 
     private Magic(int[][] values) {
@@ -144,7 +152,7 @@ public class Magic implements Comparable<Magic> {
     public Magic newChild() {
 
         final int[][] childValues = Matrices.copy(this.values);
-        
+
         final int exchangeType = this.isSemiMagic ? RANDOM.nextInt(2) : RANDOM.nextInt(EXCHANGE_RANDOM_SPACE);
 
         switch (exchangeType) {
