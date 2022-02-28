@@ -65,8 +65,8 @@ public class Magic implements Comparable<Magic> {
 
         values = Matrices.copy(values);
         
-        for (int i = 0; i < values.length; i++) {
-            if (values[i].length != values.length) {
+        for (final int[] row : values) {
+            if (row.length != values.length) {
                 throw new IllegalArgumentException("Matrix is not an n*n square");
             }
         }
