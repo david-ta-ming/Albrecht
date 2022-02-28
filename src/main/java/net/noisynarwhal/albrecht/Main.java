@@ -42,6 +42,7 @@ public class Main {
 
     private static final String VERSION = "1.2.0";
     private static final int NUM_THREADS = Math.max(2, Runtime.getRuntime().availableProcessors() / 2);
+    private static final boolean THREADED = true;
 
     /**
      *
@@ -87,7 +88,7 @@ public class Main {
         System.exit(0);
     }
 
-    private static Magic run(int order, File saveDir, int populationSize, int reportSecs) throws Exception {
+    private static Magic run(final int order, final File saveDir, final int populationSize, final int reportSecs) throws Exception {
 
         Magic magic = null;
 
@@ -98,50 +99,66 @@ public class Main {
         System.out.println("Searching...");
         System.out.println("Order: " + Integer.toString(order));
         System.out.println("Population Size: " + Integer.toString(populationSize));
-        System.out.println("Number of threads: " + Integer.toString(NUM_THREADS));
 
         final long start = System.nanoTime();
 
-        final List<Future<Magic>> tasks = new ArrayList<>();
+        if (THREADED) {
 
-        final ExecutorService threadService = Executors.newFixedThreadPool(NUM_THREADS);
-        try {
-            for (int i = 0; i < NUM_THREADS; i++) {
-                final Callable<Magic> thread = new EvolutionManager(order, populationSize, reportSecs);
-                final Future<Magic> task = threadService.submit(thread);
-                tasks.add(task);
+            /**
+             * Run as multiple parallel populations
+             */
+            System.out.println("Number of threads: " + Integer.toString(NUM_THREADS));
+
+            final List<Future<Magic>> tasks = new ArrayList<>();
+
+            final ExecutorService threadService = Executors.newFixedThreadPool(NUM_THREADS);
+            try {
+                for (int i = 0; i < NUM_THREADS; i++) {
+                    final Callable<Magic> thread = new MultiPopulationManager(order, populationSize, reportSecs);
+                    final Future<Magic> task = threadService.submit(thread);
+                    tasks.add(task);
+                }
+            } finally {
+                threadService.shutdown();
             }
-        } finally {
-            threadService.shutdown();
-        }
 
-        for (final Future<Magic> task : tasks) {
-            final Magic m = task.get();
-            if (m.isMagic()) {
-                magic = m;
-                break;
+            for (final Future<Magic> task : tasks) {
+                final Magic m = task.get();
+                if (m.isMagic()) {
+                    magic = m;
+                    break;
+                }
             }
-        }
 
-        final long elapsed = System.nanoTime() - start;
-
-        if (magic != null) {
-
-            final int[][] standardValues = Matrices.standardize(magic.getValues());
-
-            Main.printResults(standardValues, elapsed, order);
-
-            final File saveFile = Main.saveResults(standardValues, order, saveDir);
-
-            System.out.println("File: " + saveFile.getAbsolutePath());
         } else {
 
-            System.out.println("");
-            System.out.println("*** Error: null result ***");
+            /**
+             * Run as a single population
+             */
+            System.out.println("Number of threads: Single process");
+            magic = Population.evolve(order, populationSize, new SinglePopulationManager(order, reportSecs));
 
+            final long elapsed = System.nanoTime() - start;
+
+            if (magic != null) {
+
+                final int[][] standardValues = Matrices.standardize(magic.getValues());
+
+                Main.printResults(standardValues, elapsed, order);
+
+                final File saveFile = Main.saveResults(standardValues, order, saveDir);
+
+                System.out.println("File: " + saveFile.getAbsolutePath());
+            } else {
+
+                System.out.println("");
+                System.out.println("*** Error: null result ***");
+
+            }
         }
 
         return magic;
+
     }
 
     private static File saveResults(final int[][] standardValues, int order, File saveDir) throws IOException {
@@ -192,81 +209,10 @@ public class Main {
         System.out.println("Order: " + Integer.toString(order));
 
         System.out.println("");
-        System.out.println("Elapsed: " + Main.timeMessage(elapsed, TimeUnit.NANOSECONDS));
+        System.out.println("Elapsed: " + Main.printTimeMessage(elapsed, TimeUnit.NANOSECONDS));
     }
 
-    private static class EvolutionManager implements Callable<Magic>, PopulationManager {
-
-        private static final AtomicBoolean MAGIC_FOUND = new AtomicBoolean(false);
-        private static final AtomicInteger HIGH_SCORE = new AtomicInteger(Integer.MIN_VALUE);
-        private static final long STARTED = System.nanoTime();
-        private static final AtomicLong LAST_REPORT = new AtomicLong(System.nanoTime());
-
-        private final int order;
-        private final int populationSize;
-        private final int reportSecs;
-
-        private EvolutionManager(int order, int populationSize, int reportSecs) {
-            this.order = order;
-            this.populationSize = populationSize;
-            this.reportSecs = reportSecs;
-        }
-
-        @Override
-        public Magic call() {
-            try {
-                return Population.evolve(this.order, this.populationSize, this);
-            } catch (Throwable th) {
-                System.err.print(th);
-                throw th;
-            }
-        }
-
-        @Override
-        public void onStart(SortedSet<Magic> pop) {
-        }
-
-        @Override
-        public boolean isFinished() {
-            return MAGIC_FOUND.get();
-        }
-
-        @Override
-        public void report(SortedSet<Magic> pop) {
-
-            if (this.reportSecs > 0
-                    && ThreadLocalRandom.current().nextDouble() < 0.0001
-                    && TimeUnit.SECONDS.convert(System.nanoTime() - LAST_REPORT.get(), TimeUnit.NANOSECONDS) >= this.reportSecs) {
-
-                LAST_REPORT.set(System.nanoTime());
-
-                final Magic first = pop.first();
-                HIGH_SCORE.set(Math.max(HIGH_SCORE.get(), first.getScore()));
-                final long elapsed = System.nanoTime() - STARTED;
-
-                final StringBuilder sb = new StringBuilder();
-
-                sb.append(Integer.toString(this.order));
-                sb.append(": ");
-                sb.append(Main.timeMessage(elapsed, TimeUnit.NANOSECONDS));
-                sb.append(": ");
-                sb.append(Integer.toString(HIGH_SCORE.get()));
-                sb.append('/').append(Integer.toString(first.getMaxScore()));
-
-                System.out.println(sb.toString());
-
-            }
-        }
-
-        @Override
-        public void onFinish(SortedSet<Magic> pop) {
-
-            MAGIC_FOUND.compareAndSet(false, true);
-        }
-
-    }
-
-    private static String timeMessage(long elapsed, TimeUnit timeUnit) {
+    private static String printTimeMessage(long elapsed, TimeUnit timeUnit) {
 
         final StringBuilder sb = new StringBuilder();
 
@@ -302,6 +248,129 @@ public class Main {
         }
 
         return sb.toString();
+    }
+
+    private static class MultiPopulationManager implements Callable<Magic>, PopulationManager {
+
+        private static final AtomicBoolean MAGIC_FOUND = new AtomicBoolean(false);
+        private static final AtomicInteger HIGH_SCORE = new AtomicInteger(Integer.MIN_VALUE);
+        private static final long STARTED = System.nanoTime();
+        private static final AtomicLong LAST_REPORT = new AtomicLong(System.nanoTime());
+
+        private final int order;
+        private final int populationSize;
+        private final int reportSecs;
+
+        private MultiPopulationManager(int order, int populationSize, int reportSecs) {
+            this.order = order;
+            this.populationSize = populationSize;
+            this.reportSecs = reportSecs;
+        }
+
+        @Override
+        public Magic call() {
+            try {
+                return Population.evolve(this.order, this.populationSize, this);
+            } catch (Throwable th) {
+                System.err.print(th);
+                throw th;
+            }
+        }
+
+        @Override
+        public void onStart(SortedSet<Magic> pop) {
+        }
+
+        @Override
+        public boolean stop() {
+            return MAGIC_FOUND.get();
+        }
+
+        @Override
+        public void report(SortedSet<Magic> pop) {
+
+            if (this.reportSecs > 0
+                    && ThreadLocalRandom.current().nextDouble() < 0.0001
+                    && TimeUnit.SECONDS.convert(System.nanoTime() - LAST_REPORT.get(), TimeUnit.NANOSECONDS) >= this.reportSecs) {
+
+                LAST_REPORT.set(System.nanoTime());
+
+                final Magic first = pop.first();
+                HIGH_SCORE.set(Math.max(HIGH_SCORE.get(), first.getScore()));
+                final long elapsed = System.nanoTime() - STARTED;
+
+                final StringBuilder sb = new StringBuilder();
+
+                sb.append(Integer.toString(this.order));
+                sb.append(": ");
+                sb.append(Main.printTimeMessage(elapsed, TimeUnit.NANOSECONDS));
+                sb.append(": ");
+                sb.append(Integer.toString(HIGH_SCORE.get()));
+                sb.append('/').append(Integer.toString(first.getMaxScore()));
+
+                System.out.println(sb.toString());
+
+            }
+        }
+
+        @Override
+        public void onFinish(SortedSet<Magic> pop) {
+
+            MAGIC_FOUND.compareAndSet(false, true);
+        }
+
+    }
+
+    private static class SinglePopulationManager implements PopulationManager {
+
+        private final int order;
+        private final int reportSecs;
+        private final long started = System.nanoTime();
+
+        private long lastReport = System.nanoTime();
+
+        public SinglePopulationManager(int order, int reportSecs) {
+            this.reportSecs = reportSecs;
+            this.order = order;
+        }
+
+        @Override
+        public boolean stop() {
+            return false;
+        }
+
+        @Override
+        public void onStart(SortedSet<Magic> pop) {
+        }
+
+        @Override
+        public void report(SortedSet<Magic> pop) {
+            if (this.reportSecs > 0
+                    && ThreadLocalRandom.current().nextDouble() < 0.0001
+                    && TimeUnit.SECONDS.convert(System.nanoTime() - this.lastReport, TimeUnit.NANOSECONDS) >= this.reportSecs) {
+
+                this.lastReport = System.nanoTime();
+
+                final Magic first = pop.first();
+
+                final long elapsed = System.nanoTime() - this.started;
+
+                final StringBuilder sb = new StringBuilder();
+
+                sb.append(Integer.toString(this.order));
+                sb.append(": ");
+                sb.append(Main.printTimeMessage(elapsed, TimeUnit.NANOSECONDS));
+                sb.append(": ");
+                sb.append(Integer.toString(first.getScore()));
+                sb.append('/').append(Integer.toString(first.getMaxScore()));
+
+                System.out.println(sb.toString());
+            }
+        }
+
+        @Override
+        public void onFinish(SortedSet<Magic> pop) {
+        }
     }
 
 }

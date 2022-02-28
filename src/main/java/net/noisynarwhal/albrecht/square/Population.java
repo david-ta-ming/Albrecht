@@ -43,7 +43,7 @@ public class Population {
 
         manager.onStart(population);
 
-        while (!(population.first().isMagic() || manager.isFinished())) {
+        while (!(population.first().isMagic() || manager.stop())) {
 
             final Iterator<Magic> it = new ArrayList<>(population).iterator();
             while (it.hasNext()) {
@@ -74,7 +74,7 @@ public class Population {
          *
          * @return
          */
-        public boolean isFinished();
+        public boolean stop();
 
         /**
          *
@@ -98,7 +98,7 @@ public class Population {
     private static class DefaultPopulationMonitor implements PopulationManager {
 
         @Override
-        public boolean isFinished() {
+        public boolean stop() {
             return false;
         }
 
