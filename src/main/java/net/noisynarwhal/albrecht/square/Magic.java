@@ -11,16 +11,14 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.concurrent.atomic.AtomicLong;
 
 /**
  *
  * @author lioudt
  */
-public class Magic implements Comparable<Magic> {
+public class Magic {
 
     private static final int EXCHANGE_RANDOM_SPACE = 80;
-    private static final AtomicLong SERIAL_COUNTER = new AtomicLong(0);
 
     private final Random RANDOM = ThreadLocalRandom.current();
     private final int order;
@@ -30,7 +28,8 @@ public class Magic implements Comparable<Magic> {
     private final int hashCode;
     private final boolean isSemiMagic;
     private final boolean isMagic;
-    private final long serial = SERIAL_COUNTER.getAndIncrement();
+
+    
 
     /**
      *
@@ -171,9 +170,9 @@ public class Magic implements Comparable<Magic> {
 
         final int[][] childValues = Matrices.copy(this.values);
 
-        final int exchangeType = this.isSemiMagic ? RANDOM.nextInt(2) : RANDOM.nextInt(EXCHANGE_RANDOM_SPACE);
+        final int mutationType = this.isSemiMagic ? RANDOM.nextInt(2) : RANDOM.nextInt(EXCHANGE_RANDOM_SPACE);
 
-        switch (exchangeType) {
+        switch (mutationType) {
 
             case 0: {
                 /**
@@ -299,14 +298,6 @@ public class Magic implements Comparable<Magic> {
         return this.isMagic;
     }
 
-    /**
-     *
-     * @return
-     */
-    public long getSerial() {
-        return this.serial;
-    }
-
     @Override
     public int hashCode() {
         return this.hashCode;
@@ -328,22 +319,6 @@ public class Magic implements Comparable<Magic> {
         }
 
         return equals;
-    }
-
-    @Override
-    public int compareTo(Magic other) {
-
-        final int rank;
-
-        if (this == other) {
-            rank = 0;
-        } else if (this.score != other.score) {
-            rank = other.score - this.score;
-        } else {
-            rank = (other.serial < this.serial) ? -1 : +1;
-        }
-
-        return rank;
     }
 
 }

@@ -10,9 +10,9 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import net.noisynarwhal.albrecht.square.Evolutions;
 import net.noisynarwhal.albrecht.square.Magic;
 import net.noisynarwhal.albrecht.square.Matrices;
-import net.noisynarwhal.albrecht.square.Population;
 
 /**
  * Benchmark evolution times
@@ -26,11 +26,11 @@ public class Benchmark {
      * times in units of successes per second.
      *
      * @param args
+     * @throws java.lang.Exception
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
 
         final int order = 9;
-        final int populationSize = 200;
         final int numTrials = 500;
 
         System.gc();
@@ -42,7 +42,7 @@ public class Benchmark {
             final Magic magic;
             final long start = System.nanoTime();
 
-            magic = Population.evolve(order, populationSize);
+            magic = Evolutions.evolve(order);
 
             final long elapsed = System.nanoTime() - start;
 
@@ -94,7 +94,7 @@ public class Benchmark {
         final long secs = TimeUnit.SECONDS.convert(sum, TimeUnit.NANOSECONDS);
 
         final double average = ((double) times.size()) / ((double) secs);
-        System.out.println("Adjusted average: " + average);
+        System.out.println("Completions/sec (adjusted average): " + average);
     }
 
     /**
