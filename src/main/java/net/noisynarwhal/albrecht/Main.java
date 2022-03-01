@@ -100,10 +100,6 @@ public class Main {
 
                     final long elapsed = System.nanoTime() - this.start;
 
-                    System.out.println("");
-                    System.out.println(Matrices.print(magic.getValues()));
-                    System.out.println("");
-
                     final long elapsedSecs = TimeUnit.SECONDS.convert(elapsed, TimeUnit.NANOSECONDS);
                     this.highScore.set(Math.max(this.highScore.get(), magic.getScore()));
 

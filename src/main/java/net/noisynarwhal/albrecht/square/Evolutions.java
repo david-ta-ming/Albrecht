@@ -211,11 +211,18 @@ public class Evolutions {
 
     }
 
+    /**
+     * Used internally to manage multi-threaded evolutions. The isFinished
+     * method is used to signal other threads that a solution has been found.
+     */
     private static interface EvolutionManager extends EvolutionMonitor {
 
         public boolean isFinished();
     }
 
+    /**
+     * A default do-nothing (mostly) implementation of EvolutionManager
+     */
     private static class DefaultEvolutionManager implements EvolutionManager {
 
         @Override
