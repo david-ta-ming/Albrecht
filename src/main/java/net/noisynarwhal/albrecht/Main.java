@@ -137,43 +137,61 @@ public class Main {
              */
             System.out.println("Number of threads: Single process");
             magic = Population.evolve(order, populationSize, new SinglePopulationManager(order, reportSecs));
+        }
 
-            final long elapsed = System.nanoTime() - start;
+        final long elapsed = System.nanoTime() - start;
 
-            if (magic != null) {
+        if (magic != null) {
 
-                final int[][] standardValues = Matrices.standardize(magic.getValues());
+            final int[][] values = magic.getValues();
 
-                Main.printResults(standardValues, elapsed, order);
+            Main.printResults(values, elapsed);
 
-                final File saveFile = Main.saveResults(standardValues, order, saveDir);
+            final File saveFile = Main.saveResults(values, saveDir);
 
-                System.out.println("File: " + saveFile.getAbsolutePath());
-            } else {
+            System.out.println("File: " + saveFile.getAbsolutePath());
+        } else {
 
-                System.out.println("");
-                System.out.println("*** Error: null result ***");
+            System.out.println("");
+            System.out.println("*** Error: null result ***");
 
-            }
         }
 
         return magic;
 
     }
 
-    private static File saveResults(final int[][] standardValues, int order, File saveDir) throws IOException {
+    /**
+     * Standardize the results to Frénicle form then save to file. The filename
+     * format is:
+     * <order>_<number1>-<number2>-<number3>_<file hash>.txt. The file hash is a
+     * FarmHash Fingerprint64 as implemented in the Guava library.
+     *
+     * @see
+     * https://guava.dev/releases/snapshot/api/docs/com/google/common/hash/Hashing.html#farmHashFingerprint64()
+     * @param values
+     * @param saveDir
+     * @return the file to which the results have been saved
+     * @throws IOException
+     */
+    private static File saveResults(int[][] values, File saveDir) throws IOException {
 
         final File saveFile;
+
+        values = Matrices.standardize(values);
 
         final StringBuilder filename = new StringBuilder();
 
         final Hasher valuesHash = Hashing.farmHashFingerprint64().newHasher();
-        for (final int[] row : standardValues) {
+        for (final int[] row : values) {
             for (final int v : row) {
                 valuesHash.putInt(v);
             }
         }
-        final int[] row0 = standardValues[0];
+        final int[] row0 = values[0];
+
+        final int order = row0.length;
+
         filename.append(Integer.toString(order));
         filename.append('_');
         filename.append(Integer.toString(row0[0]));
@@ -187,17 +205,29 @@ public class Main {
 
         saveFile = new File(saveDir, filename.toString());
         try (final Writer writer = new FileWriter(saveFile)) {
-            Matrices.print(standardValues, writer);
+            Matrices.print(values, writer);
         }
 
         return saveFile;
 
     }
 
-    private static void printResults(final int[][] standardValues, final long elapsed, int order) throws IOException {
+    /**
+     * Standardize the results to Frénicle form then print details to standard
+     * out.
+     *
+     * @param values
+     * @param elapsed
+     * @throws IOException
+     */
+    private static void printResults(int[][] values, final long elapsed) throws IOException {
+
+        values = Matrices.standardize(values);
+
+        final int order = values.length;
 
         System.out.println("");
-        System.out.println(Matrices.print(standardValues));
+        System.out.println(Matrices.print(values));
 
         System.out.println("");
         System.out.println(new Date());
