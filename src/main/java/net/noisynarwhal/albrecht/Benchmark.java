@@ -31,7 +31,7 @@ public class Benchmark {
     public static void main(String[] args) throws Exception {
 
         final int order = 9;
-        final int numTrials = 500;
+        final int numTrials = 1500;
 
         final List<Long> times = new ArrayList<>();
 

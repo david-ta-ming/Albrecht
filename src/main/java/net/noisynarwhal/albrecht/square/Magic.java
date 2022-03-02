@@ -26,6 +26,8 @@ public class Magic {
     private final int hashCode;
     private final boolean isSemiMagic;
     private final boolean isMagic;
+    private final List<Integer> openRows = new ArrayList<>();
+    private final List<Integer> openCols = new ArrayList<>();
 
     /**
      *
@@ -124,9 +126,13 @@ public class Magic {
 
             if (magicSum == sumRow) {
                 scoreSum++;
+            } else {
+                this.openRows.add(i);
             }
             if (magicSum == sumCol) {
                 scoreSum++;
+            } else {
+                this.openCols.add(i);
             }
 
             sumlr += this.values[i][i];
@@ -193,23 +199,57 @@ public class Magic {
             }
 
         } else {
-            /**
-             * Value exchange
-             */
-            int r1;
-            int c1;
-            int r2;
-            int c2;
-            do {
-                r1 = RANDOM.nextInt(this.order);
-                c1 = RANDOM.nextInt(this.order);
 
-                r2 = RANDOM.nextInt(this.order);
-                c2 = RANDOM.nextInt(this.order);
+            final boolean openRowSwap;
 
-            } while (r1 == r2 && c1 == c2);
+            if (!(this.openRows.isEmpty() || this.openCols.isEmpty())) {
+                openRowSwap = RANDOM.nextBoolean();
+            } else {
+                openRowSwap = this.openCols.isEmpty();
+            }
 
-            Matrices.switchValues(childValues, r1, c1, r2, c2);
+            if (openRowSwap) {
+                Collections.shuffle(this.openRows);
+                /**
+                 * Value exchange
+                 */
+                int r1;
+                int c1;
+                int r2;
+                int c2;
+                do {
+
+                    r1 = this.openRows.get(0);
+                    c1 = RANDOM.nextInt(this.order);
+
+                    r2 = this.openRows.get(1);
+                    c2 = RANDOM.nextInt(this.order);
+
+                } while (r1 == r2 && c1 == c2);
+
+                Matrices.switchValues(childValues, r1, c1, r2, c2);
+            } else {
+                Collections.shuffle(this.openCols);
+                /**
+                 * Value exchange
+                 */
+                int r1;
+                int c1;
+                int r2;
+                int c2;
+                do {
+
+                    r1 = RANDOM.nextInt(this.order);
+                    c1 = this.openCols.get(0);
+
+                    r2 = RANDOM.nextInt(this.order);
+                    c2 = this.openCols.get(1);
+
+                } while (r1 == r2 && c1 == c2);
+
+                Matrices.switchValues(childValues, r1, c1, r2, c2);
+            }
+
         }
 
         final Magic child = new Magic(childValues);

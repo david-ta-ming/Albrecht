@@ -32,7 +32,7 @@ import org.apache.commons.cli.Options;
  */
 public class Main {
 
-    private static final String VERSION = "3.1.4";
+    private static final String VERSION = "4.0.0";
     private static final int NUM_THREADS = Math.max(2, Runtime.getRuntime().availableProcessors() / 3);
 
     /**
