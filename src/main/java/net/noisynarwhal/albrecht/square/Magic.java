@@ -200,6 +200,9 @@ public class Magic {
 
         } else {
 
+            /**
+             * Pick a swap by open rows or open cols
+             */
             final boolean openRowSwap;
 
             if (!(this.openRows.isEmpty() || this.openCols.isEmpty())) {
