@@ -32,8 +32,8 @@ import org.apache.commons.cli.Options;
  */
 public class Main {
 
-    private static final String VERSION = "3.1.2";
-    private static final int NUM_THREADS = Math.max(2, Runtime.getRuntime().availableProcessors() / 2);
+    private static final String VERSION = "3.1.4";
+    private static final int NUM_THREADS = Math.max(2, Runtime.getRuntime().availableProcessors() / 3);
 
     /**
      *
@@ -193,7 +193,7 @@ public class Main {
      * @param elapsed
      * @throws IOException
      */
-    private static void printResults(int[][] values, final long elapsed) throws IOException {
+    private static void printResults(int[][] values, final long elapsed) {
 
         values = Matrices.standardize(values);
 
@@ -206,7 +206,11 @@ public class Main {
         System.out.println(new Date());
 
         System.out.println("");
-        System.out.println("*** Complete ***");
+        if (Matrices.isMagic(values)) {
+            System.out.println("*** Complete ***");
+        } else {
+            System.out.println("*** Not magic ***");
+        }
 
         System.out.println("");
         System.out.println("Order: " + Integer.toString(order));

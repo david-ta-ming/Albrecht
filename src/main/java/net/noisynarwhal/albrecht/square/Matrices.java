@@ -49,6 +49,34 @@ public class Matrices {
         return copy;
     }
 
+    public static void switchValues(final int[][] matrix, int r1, int c1, int r2, int c2) {
+
+        final int v2 = matrix[r2][c2];
+
+        matrix[r2][c2] = matrix[r1][c1];
+        matrix[r1][c1] = v2;
+    }
+
+    public static void switchCols(final int[][] matrix, int c1, int c2) {
+
+        for (final int[] row : matrix) {
+            final int v2 = row[c2];
+            row[c2] = row[c1];
+            row[c1] = v2;
+        }
+
+    }
+
+    public static void switchRows(final int[][] matrix, int r1, int r2) {
+
+        final int r2len = matrix[r2].length;
+        final int[] valsR2 = new int[r2len];
+        System.arraycopy(matrix[r2], 0, valsR2, 0, r2len);
+
+        matrix[r2] = matrix[r1];
+        matrix[r1] = valsR2;
+    }
+
     /**
      *
      * @param square

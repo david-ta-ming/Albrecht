@@ -33,13 +33,12 @@ public class Benchmark {
         final int order = 9;
         final int numTrials = 500;
 
-        System.gc();
-
         final List<Long> times = new ArrayList<>();
 
         for (int i = 0; i < numTrials; i++) {
 
             final Magic magic;
+
             final long start = System.nanoTime();
 
             magic = Evolutions.evolve(order);
@@ -59,16 +58,16 @@ public class Benchmark {
             final long elapsedSecs = TimeUnit.SECONDS.convert(elapsed, TimeUnit.NANOSECONDS);
 
             if (elapsedSecs > 1) {
-                
+
                 sb.append(Long.toString(elapsedSecs));
                 sb.append(" secs");
-                
+
             } else {
 
                 final long elapsedMs = TimeUnit.MILLISECONDS.convert(elapsed, TimeUnit.NANOSECONDS);
-                
+
                 final long stars = (elapsedMs / 50) + 1;
-                
+
                 for (int j = 1; j <= stars; j++) {
                     if (j % 3 == 0) {
                         sb.append(Integer.toString(j));

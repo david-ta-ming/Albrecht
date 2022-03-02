@@ -137,14 +137,21 @@ public class Magic {
 
         this.isSemiMagic = (scoreSum == this.maxScore - 2);
 
+        /**
+         * Don't consider the diagonals until the square is semi-magic. Also,
+         * only accept the diagonals if they simultaneously sum to the magic
+         * constant.
+         */
         if (this.isSemiMagic && magicSum == sumlr && magicSum == sumrl) {
             scoreSum = this.maxScore;
         }
+
+        this.score = scoreSum;
+
         this.hashCode = hash;
 
         this.isMagic = scoreSum == this.maxScore;
 
-        this.score = scoreSum;
     }
 
     /**
@@ -169,11 +176,7 @@ public class Magic {
                     r2 = RANDOM.nextInt(this.order);
                 } while (r1 == r2);
 
-                final int[] valsR2 = new int[this.order];
-                System.arraycopy(childValues[r2], 0, valsR2, 0, this.order);
-
-                childValues[r2] = childValues[r1];
-                childValues[r1] = valsR2;
+                Matrices.switchRows(childValues, r1, r2);
             } else {
                 /**
                  * Col exchange
@@ -186,14 +189,7 @@ public class Magic {
                     c2 = RANDOM.nextInt(this.order);
                 } while (c1 == c2);
 
-                for (int r = 0; r < this.order; r++) {
-
-                    final int v2 = childValues[r][c2];
-
-                    childValues[r][c2] = childValues[r][c1];
-                    childValues[r][c1] = v2;
-
-                }
+                Matrices.switchCols(childValues, c1, c2);
             }
 
         } else {
@@ -213,10 +209,7 @@ public class Magic {
 
             } while (r1 == r2 && c1 == c2);
 
-            final int v2 = childValues[r2][c2];
-
-            childValues[r2][c2] = childValues[r1][c1];
-            childValues[r1][c1] = v2;
+            Matrices.switchValues(childValues, r1, c1, r2, c2);
         }
 
         final Magic child = new Magic(childValues);
