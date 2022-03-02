@@ -54,16 +54,29 @@ public class Benchmark {
 
             times.add(elapsed);
 
-            final long elapsedMs = TimeUnit.MILLISECONDS.convert(elapsed, TimeUnit.NANOSECONDS);
-            final long stars = (elapsedMs / 50) + 1;
             final StringBuilder sb = new StringBuilder();
 
-            for (int j = 1; j <= stars; j++) {
-                if (j % 3 == 0) {
-                    sb.append(Integer.toString(j));
-                } else {
-                    sb.append('*');
+            final long elapsedSecs = TimeUnit.SECONDS.convert(elapsed, TimeUnit.NANOSECONDS);
+
+            if (elapsedSecs > 1) {
+                
+                sb.append(Long.toString(elapsedSecs));
+                sb.append(" secs");
+                
+            } else {
+
+                final long elapsedMs = TimeUnit.MILLISECONDS.convert(elapsed, TimeUnit.NANOSECONDS);
+                
+                final long stars = (elapsedMs / 50) + 1;
+                
+                for (int j = 1; j <= stars; j++) {
+                    if (j % 3 == 0) {
+                        sb.append(Integer.toString(j));
+                    } else {
+                        sb.append('*');
+                    }
                 }
+
             }
             System.out.println(Integer.toString(i) + ": " + sb.toString());
 
@@ -94,7 +107,9 @@ public class Benchmark {
         final long secs = TimeUnit.SECONDS.convert(sum, TimeUnit.NANOSECONDS);
 
         final double average = ((double) times.size()) / ((double) secs);
-        System.out.println("Completions/sec (adjusted average): " + average);
+        final double inverse = 1.0 / average;
+        System.out.println("Completions/sec (adj avg): " + average);
+        System.out.println("Secs/completion (adj avg): " + inverse);
     }
 
     /**

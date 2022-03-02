@@ -32,8 +32,8 @@ import org.apache.commons.cli.Options;
  */
 public class Main {
 
-    private static final String VERSION = "2.0.0";
-    private static final int NUM_THREADS = Math.max(2, Runtime.getRuntime().availableProcessors() / 3);
+    private static final String VERSION = "3.1.2";
+    private static final int NUM_THREADS = Math.max(2, Runtime.getRuntime().availableProcessors() / 2);
 
     /**
      *
@@ -46,6 +46,7 @@ public class Main {
         options.addOption(new Option("h", "help", false, "Display help"));
         options.addOption(new Option("o", "order", true, "Magic square order"));
         options.addOption(new Option("d", "dir", true, "Output directory"));
+        options.addOption(new Option("r", "report", true, "Report frequency in secs"));
 
         try {
 
@@ -58,12 +59,13 @@ public class Main {
 
             final int order = line.hasOption("order") ? Integer.parseInt(line.getOptionValue("order")) : 30;
             final File saveDir = line.hasOption("dir") ? new File(line.getOptionValue("dir")) : new File(System.getProperty("user.dir"));
+            final int reportFreq = line.hasOption("report") ? Integer.parseInt(line.getOptionValue("report")) : -1;
 
             if (!saveDir.isDirectory()) {
                 throw new RuntimeException("Invalid directory path: '" + saveDir.getAbsolutePath() + '\'');
             }
 
-            Main.run(order, saveDir);
+            Main.run(order, saveDir, reportFreq);
 
         } catch (Throwable th) {
 
@@ -75,7 +77,7 @@ public class Main {
         System.exit(0);
     }
 
-    private static Magic run(final int order, final File saveDir) throws Exception {
+    private static Magic run(final int order, final File saveDir, final int reportFreq) throws Exception {
 
         final Magic magic;
 
@@ -95,15 +97,14 @@ public class Main {
 
             @Override
             public void report(Magic magic) {
-                if (ThreadLocalRandom.current().nextDouble() < 0.00001
-                        && TimeUnit.SECONDS.convert(System.nanoTime() - this.lastReport.get(), TimeUnit.NANOSECONDS) >= 15) {
+                if (reportFreq > 0 && ThreadLocalRandom.current().nextDouble() < 0.00001
+                        && TimeUnit.SECONDS.convert(System.nanoTime() - this.lastReport.get(), TimeUnit.NANOSECONDS) >= reportFreq) {
 
                     final long elapsed = System.nanoTime() - this.start;
 
-                    final long elapsedSecs = TimeUnit.SECONDS.convert(elapsed, TimeUnit.NANOSECONDS);
                     this.highScore.set(Math.max(this.highScore.get(), magic.getScore()));
 
-                    System.out.println(Integer.toString(order) + ": " + Long.toString(elapsedSecs) + "s: " + Integer.toString(this.highScore.get()) + '/' + Integer.toString(magic.getMaxScore()));
+                    System.out.println(Integer.toString(order) + ": " + Main.printTimeMessage(elapsed, TimeUnit.NANOSECONDS) + ' ' + Integer.toString(this.highScore.get()) + '/' + Integer.toString(magic.getMaxScore()));
 
                     this.lastReport.set(System.nanoTime());
                 }

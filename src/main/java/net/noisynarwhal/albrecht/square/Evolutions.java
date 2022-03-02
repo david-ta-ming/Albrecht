@@ -157,23 +157,27 @@ public class Evolutions {
     }
 
     /**
-     *
+     * A class intended to perform monitoring, e.g. printing regular status
+     * reports, on evolution progress.
      */
     public static interface EvolutionMonitor {
 
         /**
+         * Performed at start of evolution
          *
          * @param magic
          */
         public void onStart(Magic magic);
 
         /**
+         * Invoked with every new generation of child
          *
          * @param magic
          */
         public void report(Magic magic);
 
         /**
+         * Called when finished
          *
          * @param magic
          */
@@ -181,7 +185,8 @@ public class Evolutions {
     }
 
     /**
-     *
+     * A default do-nothing implementation of
+     * {@link net.noisynarwhal.albrecht.square.Evolutions.EvolutionMonitor}.
      */
     public static class DefaultEvolutionMonitor implements EvolutionMonitor {
 

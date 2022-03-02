@@ -18,8 +18,6 @@ import java.util.concurrent.ThreadLocalRandom;
  */
 public class Magic {
 
-    private static final int EXCHANGE_RANDOM_SPACE = 80;
-
     private final Random RANDOM = ThreadLocalRandom.current();
     private final int order;
     private final int[][] values;
@@ -28,8 +26,6 @@ public class Magic {
     private final int hashCode;
     private final boolean isSemiMagic;
     private final boolean isMagic;
-
-    
 
     /**
      *
@@ -108,7 +104,6 @@ public class Magic {
          * Score of right-to-left diagonal
          */
         int sumrl = 0;
-
         for (int i = 0; i < this.order; i++) {
             /**
              * Score of rows
@@ -136,30 +131,20 @@ public class Magic {
 
             sumlr += this.values[i][i];
             sumrl += this.values[i][this.order - 1 - i];
-
         }
 
         this.maxScore = this.order + this.order + 2;
 
-        this.isSemiMagic = scoreSum == this.maxScore - 2;
+        this.isSemiMagic = (scoreSum == this.maxScore - 2);
 
-        if (magicSum == sumlr) {
-            scoreSum++;
+        if (this.isSemiMagic && magicSum == sumlr && magicSum == sumrl) {
+            scoreSum = this.maxScore;
         }
-        if (magicSum == sumrl) {
-            scoreSum++;
-        }
-
         this.hashCode = hash;
 
         this.isMagic = scoreSum == this.maxScore;
 
-        if (scoreSum == this.maxScore - 1) {
-            this.score = - 1;
-        } else {
-            this.score = scoreSum;
-        }
-
+        this.score = scoreSum;
     }
 
     /**
@@ -170,11 +155,9 @@ public class Magic {
 
         final int[][] childValues = Matrices.copy(this.values);
 
-        final int mutationType = this.isSemiMagic ? RANDOM.nextInt(2) : RANDOM.nextInt(EXCHANGE_RANDOM_SPACE);
+        if (this.isSemiMagic) {
 
-        switch (mutationType) {
-
-            case 0: {
+            if (RANDOM.nextBoolean()) {
                 /**
                  * Row exchange
                  */
@@ -191,11 +174,7 @@ public class Magic {
 
                 childValues[r2] = childValues[r1];
                 childValues[r1] = valsR2;
-
-                break;
-            }
-
-            case 1: {
+            } else {
                 /**
                  * Col exchange
                  */
@@ -215,32 +194,29 @@ public class Magic {
                     childValues[r][c1] = v2;
 
                 }
-
-                break;
             }
 
-            default: {
-                /**
-                 * Value exchange
-                 */
-                int r1;
-                int c1;
-                int r2;
-                int c2;
-                do {
-                    r1 = RANDOM.nextInt(this.order);
-                    c1 = RANDOM.nextInt(this.order);
+        } else {
+            /**
+             * Value exchange
+             */
+            int r1;
+            int c1;
+            int r2;
+            int c2;
+            do {
+                r1 = RANDOM.nextInt(this.order);
+                c1 = RANDOM.nextInt(this.order);
 
-                    r2 = RANDOM.nextInt(this.order);
-                    c2 = RANDOM.nextInt(this.order);
+                r2 = RANDOM.nextInt(this.order);
+                c2 = RANDOM.nextInt(this.order);
 
-                } while (r1 == r2 && c1 == c2);
+            } while (r1 == r2 && c1 == c2);
 
-                final int v2 = childValues[r2][c2];
+            final int v2 = childValues[r2][c2];
 
-                childValues[r2][c2] = childValues[r1][c1];
-                childValues[r1][c1] = v2;
-            }
+            childValues[r2][c2] = childValues[r1][c1];
+            childValues[r1][c1] = v2;
         }
 
         final Magic child = new Magic(childValues);
