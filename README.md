@@ -38,7 +38,7 @@ The evolution process starts with a square matrix with values arranged at random
 
  
 
-## Completion Times
+## Benchmarks
 
 The Albrecht algorithm is fundamentally stochastic, therefore individual runtimes will vary. Additionally, the application runs parallel processes dependent on the number of processors available to the environment. The following benchmarks were performed on a system with a 2.6 GHz Intel i7 and 6 cores.
 
@@ -48,9 +48,11 @@ The Albrecht algorithm is fundamentally stochastic, therefore individual runtime
 | 15    | 1/4 secs         |
 | 20    | 1.7 secs         |
 | 25    | 7 secs           |
-| 30    | 30 secs          |
-| 35    | 90 secs          |
-| 50    | 8 mins           |
+| 30    | 13 secs          |
+| 35    | 45 secs          |
+| 40    | 1.8 mins         |
+| 45    | 3 mins           |
+| 50    | 5.6 mins         |
 
 
 
