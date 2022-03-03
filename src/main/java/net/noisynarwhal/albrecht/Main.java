@@ -12,8 +12,10 @@ import com.google.common.hash.Hashing;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.Writer;
 import java.util.Date;
+import java.util.Properties;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -22,9 +24,6 @@ import net.noisynarwhal.albrecht.square.Evolutions;
 import net.noisynarwhal.albrecht.square.Evolutions.DefaultEvolutionMonitor;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.DefaultParser;
-import org.apache.commons.cli.HelpFormatter;
-import org.apache.commons.cli.Option;
-import org.apache.commons.cli.Options;
 
 /**
  *
@@ -32,8 +31,20 @@ import org.apache.commons.cli.Options;
  */
 public class Main {
 
-    private static final String VERSION = "4.0.0";
-    private static final int NUM_THREADS = Math.max(2, Runtime.getRuntime().availableProcessors() / 3);
+    public static final Properties PROJECT = new Properties();
+    private static final int NUM_THREADS = Math.max(2, Runtime.getRuntime().availableProcessors() / 2);
+    private static final org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(Main.class.getName());
+
+    static {
+
+        try (final InputStream in = Main.class.getResourceAsStream("/project.properties")) {
+
+            PROJECT.load(in);
+
+        } catch (IOException ex) {
+            LOGGER.error(ex, ex);
+        }
+    }
 
     /**
      *
@@ -42,18 +53,14 @@ public class Main {
     @SuppressWarnings("UseSpecificCatch")
     public static void main(String[] args) {
 
-        final Options options = new Options();
-        options.addOption(new Option("h", "help", false, "Display help"));
-        options.addOption(new Option("o", "order", true, "Magic square order"));
-        options.addOption(new Option("d", "dir", true, "Output directory"));
-        options.addOption(new Option("r", "report", true, "Report frequency in secs"));
+        final MainOptions options = new MainOptions();
 
         try {
 
             final CommandLine line = new DefaultParser().parse(options, args);
 
             if (line.hasOption("help")) {
-                new HelpFormatter().printHelp(Main.class.getName(), options);
+                options.printHelp("");
                 System.exit(0);
             }
 
@@ -70,7 +77,7 @@ public class Main {
         } catch (Throwable th) {
 
             final String error = th.getMessage();
-            new HelpFormatter().printHelp(Main.class.getName(), "", options, error);
+            options.printHelp(error);
             System.exit(1);
         }
 
@@ -82,7 +89,7 @@ public class Main {
         final Magic magic;
 
         System.out.println("\n\n");
-        System.out.println("Version " + VERSION);
+        System.out.println("Version " + PROJECT.getProperty("version"));
         System.out.println("Searching...");
         System.out.println(new Date());
         System.out.println("Searching...");
@@ -97,6 +104,7 @@ public class Main {
 
             @Override
             public void report(Magic magic) {
+
                 if (reportFreq > 0 && ThreadLocalRandom.current().nextDouble() < 0.00001
                         && TimeUnit.SECONDS.convert(System.nanoTime() - this.lastReport.get(), TimeUnit.NANOSECONDS) >= reportFreq) {
 
@@ -108,6 +116,7 @@ public class Main {
 
                     this.lastReport.set(System.nanoTime());
                 }
+
             }
 
         });
