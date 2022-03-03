@@ -57,20 +57,37 @@ public class Matrices {
         matrix[r1][c1] = v2;
     }
 
-    public static void switchCols(final int[][] matrix, int c1, int c2) {
+    /**
+     * Switch two columns in the passed matrix
+     * @param matrix
+     * @param c1 the index of the first column
+     * @param c2 the index of the second column
+     */
+    public static void switchCols(final int[][] matrix, final int c1, final int c2) {
 
         for (final int[] row : matrix) {
+            
             final int v2 = row[c2];
+            
             row[c2] = row[c1];
             row[c1] = v2;
+            
         }
 
     }
 
-    public static void switchRows(final int[][] matrix, int r1, int r2) {
+    /**
+     * Switch two rows in the passed matrix
+     * @param matrix
+     * @param r1 the index of the first row
+     * @param r2 the index of the second row
+     */
+    public static void switchRows(final int[][] matrix, final int r1, final int r2) {
 
         final int r2len = matrix[r2].length;
+
         final int[] valsR2 = new int[r2len];
+
         System.arraycopy(matrix[r2], 0, valsR2, 0, r2len);
 
         matrix[r2] = matrix[r1];
