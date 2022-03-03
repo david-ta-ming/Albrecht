@@ -212,45 +212,35 @@ public class Magic {
             }
 
             if (openRowSwap) {
-                Collections.shuffle(this.openRows);
+                
+                Collections.shuffle(this.openRows, RANDOM);
+                
                 /**
                  * Value exchange
                  */
-                int r1;
-                int c1;
-                int r2;
-                int c2;
-                do {
+                final int r1 = this.openRows.get(0);
+                final int c1 = RANDOM.nextInt(this.order);
 
-                    r1 = this.openRows.get(0);
-                    c1 = RANDOM.nextInt(this.order);
-
-                    r2 = this.openRows.get(1);
-                    c2 = RANDOM.nextInt(this.order);
-
-                } while (r1 == r2 && c1 == c2);
+                final int r2 = this.openRows.get(1);
+                final int c2 = RANDOM.nextInt(this.order);
 
                 Matrices.switchValues(childValues, r1, c1, r2, c2);
+                
             } else {
-                Collections.shuffle(this.openCols);
+                
+                Collections.shuffle(this.openCols, RANDOM);
+                
                 /**
                  * Value exchange
                  */
-                int r1;
-                int c1;
-                int r2;
-                int c2;
-                do {
+                final int r1 = RANDOM.nextInt(this.order);
+                final int c1 = this.openCols.get(0);
 
-                    r1 = RANDOM.nextInt(this.order);
-                    c1 = this.openCols.get(0);
-
-                    r2 = RANDOM.nextInt(this.order);
-                    c2 = this.openCols.get(1);
-
-                } while (r1 == r2 && c1 == c2);
+                final int r2 = RANDOM.nextInt(this.order);
+                final int c2 = this.openCols.get(1);
 
                 Matrices.switchValues(childValues, r1, c1, r2, c2);
+                
             }
 
         }
