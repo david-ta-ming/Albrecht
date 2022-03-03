@@ -49,6 +49,14 @@ public class Matrices {
         return copy;
     }
 
+    /**
+     * Modify the passed matrix such that the two specified values are switched
+     * @param matrix
+     * @param r1
+     * @param c1
+     * @param r2
+     * @param c2 
+     */
     public static void switchValues(final int[][] matrix, int r1, int c1, int r2, int c2) {
 
         final int v2 = matrix[r2][c2];
@@ -58,7 +66,8 @@ public class Matrices {
     }
 
     /**
-     * Switch two columns in the passed matrix
+     * Modify the passed matrix such that the two specified columns are switched
+     *
      * @param matrix
      * @param c1 the index of the first column
      * @param c2 the index of the second column
@@ -66,18 +75,19 @@ public class Matrices {
     public static void switchCols(final int[][] matrix, final int c1, final int c2) {
 
         for (final int[] row : matrix) {
-            
+
             final int v2 = row[c2];
-            
+
             row[c2] = row[c1];
             row[c1] = v2;
-            
+
         }
 
     }
 
     /**
-     * Switch two rows in the passed matrix
+     * Modify the passed matrix such that the two specified rows are switched
+     *
      * @param matrix
      * @param r1 the index of the first row
      * @param r2 the index of the second row
@@ -101,6 +111,7 @@ public class Matrices {
      */
     public static int[][] transpose(int[][] square) {
 
+        
         final int[][] sq = Matrices.copy(square);
 
         for (int i = 0; i < sq.length; i++) {

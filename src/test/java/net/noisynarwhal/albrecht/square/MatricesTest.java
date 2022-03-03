@@ -9,6 +9,7 @@ import java.io.Reader;
 import java.io.Writer;
 import org.junit.After;
 import org.junit.AfterClass;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -53,6 +54,13 @@ public class MatricesTest {
     @Test
     public void testTranspose() {
         System.out.println("transpose");
+
+        final int[][] matrix = new int[][]{{1, 2}, {3, 4}};
+        final int[][] expected = new int[][]{{1, 3}, {2, 4}};
+
+        final int[][] result = Matrices.transpose(matrix);
+
+        Assert.assertArrayEquals(expected, result);
     }
 
     /**
@@ -107,7 +115,7 @@ public class MatricesTest {
      * Test of read method, of class Matrices.
      */
     @Test
-    public void testRead() throws Exception {
+    public void testRead() {
         System.out.println("read");
     }
 
@@ -117,7 +125,7 @@ public class MatricesTest {
     @Test
     public void testIsMagic() {
         System.out.println("isMagic");
-                {
+        {
             int[][] matrix = new int[][]{
                 {1, 44, 71, 13, 12, 46, 76, 41, 50},
                 {65, 51, 2, 11, 80, 43, 25, 47, 45},
@@ -147,6 +155,33 @@ public class MatricesTest {
             boolean result = Matrices.isMagic(matrix);
             assertEquals(expResult, result);
         }
+    }
+
+    /**
+     * Test of switchValues method, of class Matrices.
+     */
+    @Test
+    public void testSwitchValues() {
+        System.out.println("switchValues");
+
+    }
+
+    /**
+     * Test of switchCols method, of class Matrices.
+     */
+    @Test
+    public void testSwitchCols() {
+        System.out.println("switchCols");
+
+    }
+
+    /**
+     * Test of switchRows method, of class Matrices.
+     */
+    @Test
+    public void testSwitchRows() {
+        System.out.println("switchRows");
+
     }
 
 }
