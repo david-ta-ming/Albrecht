@@ -32,15 +32,15 @@ usage: net.noisynarwhal.albrecht.Main
 
 
 
-## About
+## Algorithm
 
-The evolution process starts with a square matrix with values arranged at random.  Values are continually swapped at random until the matrix represents a semi-magic square. Subsequent changes are random row and column exchanges until a magic square is formed.
+The evolution process starts with a square matrix with values arranged at random. Mutations are applied to the square retaining incremental improvements. Values are continually swapped at random until the matrix represents a semi-magic square. Subsequent changes are random row and column exchanges until a magic square is formed.
 
  
 
 ## Completion Times
 
-The Albrecht algorithm is fundamentally stochastic, therefore individual runtimes will vary. Additionally, the application runs parallel processes dependent on the number of processors available to the environment. The following benchmarks were performed on a system with a 2.6 GHz Intel i7 with 6 cores.
+The Albrecht algorithm is fundamentally stochastic, therefore individual runtimes will vary. Additionally, the application runs parallel processes dependent on the number of processors available to the environment. The following benchmarks were performed on a system with a 2.6 GHz Intel i7 and 6 cores.
 
 | Order | Time to Complete |
 | ----- | ---------------- |
