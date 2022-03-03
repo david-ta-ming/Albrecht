@@ -6,11 +6,10 @@ Albrecht utilizes an evolutionary algorithm to generate magic squares of any ord
 
 ## Build and Run
 
-Albrecht is written in Java. To run it you'll need the Java Runtime Environment installed in your computer which can be found for download at: https://java.com/en/download/.
+Albrecht is written in Java. To run it you'll need the [Java Runtime Environment](https://java.com/en/download/). This project uses [Maven](https://maven.apache.org/install.html) for its builds.
 
 ```bash
 # execute inside Albrecht project directory
-mvn clean install
 # generate default magic square of order 15
 java -jar target/albrecht.jar 
 # generate a magic square of order 35, saving results to directory tmp, with a status report every 15 secs

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuite tests="13" failures="0" name="net.noisynarwhal.albrecht.square.MatricesTest" time="0.012" errors="0" skipped="0">
+  <properties>
+    <property name="java.runtime.name" value="Java(TM) SE Runtime Environment"/>
+    <property name="java.vm.version" value="13.0.1+9"/>
+    <property name="sun.boot.library.path" value="/Library/Java/JavaVirtualMachines/jdk-13.0.1.jdk/Contents/Home/lib"/>
+    <property name="maven.multiModuleProjectDirectory" value="/Users/lioudt/Documents/Projects/Albrecht"/>
+    <property name="java.vm.vendor" value="Oracle Corporation"/>
+    <property name="java.vendor.url" value="https://java.oracle.com/"/>
+    <property name="path.separator" value=":"/>
+    <property name="guice.disable.misplaced.annotation.check" value="true"/>
+    <property name="java.vm.name" value="Java HotSpot(TM) 64-Bit Server VM"/>
+    <property name="user.country" value="US"/>
+    <property name="sun.java.launcher" value="SUN_STANDARD"/>
+    <property name="test" value="net.noisynarwhal.albrecht.square.MatricesTest"/>
+    <property name="java.vm.specification.name" value="Java Virtual Machine Specification"/>
+    <property name="user.dir" value="/Users/lioudt/Documents/Projects/Albrecht"/>
+    <property name="java.vm.compressedOopsMode" value="Zero based"/>
+    <property name="java.runtime.version" value="13.0.1+9"/>
+    <property name="os.arch" value="x86_64"/>
+    <property name="java.io.tmpdir" value="/var/folders/1q/wptybkp97qz3jr11l8cts7r86zkvbs/T/"/>
+    <property name="line.separator" value="
+"/>
+    <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
+    <property name="os.name" value="Mac OS X"/>
+    <property name="maven.ext.class.path" value="/Applications/NetBeans 11.app/Contents/Resources/NetBeans/java/maven-nblib/netbeans-eventspy.jar"/>
+    <property name="classworlds.conf" value="/Applications/NetBeans 11.app/Contents/Resources/NetBeans/java/maven/bin/m2.conf"/>
+    <property name="sun.jnu.encoding" value="UTF-8"/>
+    <property name="java.library.path" value="/Users/lioudt/Library/Java/Extensions:/Library/Java/Extensions:/Network/Library/Java/Extensions:/System/Library/Java/Extensions:/usr/lib/java:."/>
+    <property name="jdk.debug" value="release"/>
+    <property name="java.class.version" value="57.0"/>
+    <property name="java.specification.name" value="Java Platform API Specification"/>
+    <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
+    <property name="os.version" value="10.14.6"/>
+    <property name="user.home" value="/Users/lioudt"/>
+    <property name="user.timezone" value="America/New_York"/>
+    <property name="file.encoding" value="UTF-8"/>
+    <property name="java.specification.version" value="13"/>
+    <property name="user.name" value="lioudt"/>
+    <property name="java.class.path" value="/Applications/NetBeans 11.app/Contents/Resources/NetBeans/java/maven/boot/plexus-classworlds-2.5.2.jar"/>
+    <property name="java.vm.specification.version" value="13"/>
+    <property name="sun.arch.data.model" value="64"/>
+    <property name="sun.java.command" value="org.codehaus.plexus.classworlds.launcher.Launcher -Dtest=net.noisynarwhal.albrecht.square.MatricesTest -Dmaven.ext.class.path=/Applications/NetBeans 11.app/Contents/Resources/NetBeans/java/maven-nblib/netbeans-eventspy.jar surefire:test"/>
+    <property name="java.home" value="/Library/Java/JavaVirtualMachines/jdk-13.0.1.jdk/Contents/Home"/>
+    <property name="user.language" value="en"/>
+    <property name="java.specification.vendor" value="Oracle Corporation"/>
+    <property name="java.vm.info" value="mixed mode, sharing"/>
+    <property name="java.version" value="13.0.1"/>
+    <property name="java.vendor" value="Oracle Corporation"/>
+    <property name="maven.home" value="/Applications/NetBeans 11.app/Contents/Resources/NetBeans/java/maven"/>
+    <property name="file.separator" value="/"/>
+    <property name="java.version.date" value="2019-10-15"/>
+    <property name="java.vendor.url.bug" value="https://bugreport.java.com/bugreport/"/>
+    <property name="sun.io.unicode.encoding" value="UnicodeBig"/>
+    <property name="sun.cpu.endian" value="little"/>
+  </properties>
+  <testcase classname="net.noisynarwhal.albrecht.square.MatricesTest" name="testSwitchValues" time="0.006"/>
+  <testcase classname="net.noisynarwhal.albrecht.square.MatricesTest" name="testStandardize" time="0"/>
+  <testcase classname="net.noisynarwhal.albrecht.square.MatricesTest" name="testValuesEqual" time="0"/>
+  <testcase classname="net.noisynarwhal.albrecht.square.MatricesTest" name="testCopy" time="0"/>
+  <testcase classname="net.noisynarwhal.albrecht.square.MatricesTest" name="testRead" time="0"/>
+  <testcase classname="net.noisynarwhal.albrecht.square.MatricesTest" name="testSwitchCols" time="0"/>
+  <testcase classname="net.noisynarwhal.albrecht.square.MatricesTest" name="testSwitchRows" time="0"/>
+  <testcase classname="net.noisynarwhal.albrecht.square.MatricesTest" name="testPrint_intArrArr" time="0"/>
+  <testcase classname="net.noisynarwhal.albrecht.square.MatricesTest" name="testPrint_intArrArr_Writer" time="0.001"/>
+  <testcase classname="net.noisynarwhal.albrecht.square.MatricesTest" name="testMirror" time="0"/>
+  <testcase classname="net.noisynarwhal.albrecht.square.MatricesTest" name="testIsMagic" time="0.002"/>
+  <testcase classname="net.noisynarwhal.albrecht.square.MatricesTest" name="testRotate" time="0"/>
+  <testcase classname="net.noisynarwhal.albrecht.square.MatricesTest" name="testTranspose" time="0.003"/>
+</testsuite>
