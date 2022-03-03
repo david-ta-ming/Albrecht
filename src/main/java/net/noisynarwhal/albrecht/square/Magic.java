@@ -26,7 +26,13 @@ public class Magic {
     private final int hashCode;
     private final boolean isSemiMagic;
     private final boolean isMagic;
+    /**
+     * Rows that do not sum to the magic constant
+     */
     private final List<Integer> openRows = new ArrayList<>();
+    /**
+     * Cols that do not sum to the magic constant
+     */
     private final List<Integer> openCols = new ArrayList<>();
 
     /**
@@ -168,6 +174,9 @@ public class Magic {
 
         final int[][] childValues = Matrices.copy(this.values);
 
+        /**
+         * If semi-magic permute rows and columns, otherwise switch cell values
+         */
         if (this.isSemiMagic) {
 
             if (RANDOM.nextBoolean()) {
@@ -212,9 +221,9 @@ public class Magic {
             }
 
             if (openRowSwap) {
-                
+
                 Collections.shuffle(this.openRows, RANDOM);
-                
+
                 /**
                  * Value exchange
                  */
@@ -225,11 +234,11 @@ public class Magic {
                 final int c2 = RANDOM.nextInt(this.order);
 
                 Matrices.switchValues(childValues, r1, c1, r2, c2);
-                
+
             } else {
-                
+
                 Collections.shuffle(this.openCols, RANDOM);
-                
+
                 /**
                  * Value exchange
                  */
@@ -240,7 +249,7 @@ public class Magic {
                 final int c2 = this.openCols.get(1);
 
                 Matrices.switchValues(childValues, r1, c1, r2, c2);
-                
+
             }
 
         }
