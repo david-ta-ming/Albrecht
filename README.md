@@ -4,7 +4,7 @@ Albrecht utilizes an evolutionary algorithm to generate magic squares of any ord
 
 
 
-## Build and Run
+## Run
 
 Albrecht is written in Java. To run it you'll need the [Java Runtime Environment](https://java.com/en/download/). This project uses [Maven](https://maven.apache.org/install.html) for its builds.
 
