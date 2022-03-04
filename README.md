@@ -10,7 +10,7 @@ Albrecht is written in Java. To run it you'll need the [Java Runtime Environment
 
 ```bash
 # execute inside Albrecht project directory
-# generate default magic square of order 15
+# generate default magic square of default order 30, saving results to the current directory
 java -jar target/albrecht.jar 
 # generate a magic square of order 35, saving results to directory tmp, with a status report every 15 secs
 java -jar target/albrecht.jar --order 35 --dir /tmp --report 15

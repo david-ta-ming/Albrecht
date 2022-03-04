@@ -13,6 +13,13 @@ import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
+ * An NxN square matrix consisting of sequential natural numbers from 1 to N*N.
+ * This is the representation of a magic square's evolution.
+ *
+ * The fitness of an instance is measured by its score. The score is the number
+ * of rows, columns, and diagonals whose sum values equal the magic sum
+ * {@code (n * (n^2 + 1) / 2)}. An instance is a magic square when this score
+ * reaches its maximum possible score {@code n^2 + 2}.
  *
  * @author lioudt
  */
@@ -44,14 +51,14 @@ public class Magic {
 
         final int[][] values = new int[order][order];
 
-        final List<Integer> l = new ArrayList<>();
+        final List<Integer> valuesList = new ArrayList<>();
         for (int i = 1; i <= order * order; i++) {
-            l.add(i);
+            valuesList.add(i);
         }
 
-        Collections.shuffle(l, ThreadLocalRandom.current());
+        Collections.shuffle(valuesList, ThreadLocalRandom.current());
 
-        final Iterator<Integer> it = l.iterator();
+        final Iterator<Integer> it = valuesList.iterator();
 
         for (int r = 0; r < order; r++) {
             for (int c = 0; c < order; c++) {
@@ -160,7 +167,7 @@ public class Magic {
             }
 
             if (magicSum == sumlr && magicSum == sumrl) {
-                scoreSum = this.maxScore;
+                scoreSum += 2;
             }
         }
 
@@ -171,8 +178,9 @@ public class Magic {
     }
 
     /**
+     * Generate a new child based on this instance's values with a mutation.
      *
-     * @return
+     * @return a new {@code Magic} instance
      */
     public Magic newChild() {
 
