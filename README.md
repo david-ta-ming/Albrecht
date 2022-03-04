@@ -45,14 +45,15 @@ The Albrecht algorithm is fundamentally stochastic, therefore individual runtime
 | Order | Time to Complete |
 | ----- | ---------------- |
 | 10    | 1/50 secs        |
-| 15    | 1/4 secs         |
-| 20    | 1.7 secs         |
-| 25    | 7 secs           |
-| 30    | 13 secs          |
-| 35    | 45 secs          |
-| 40    | 1.8 mins         |
-| 45    | 3 mins           |
-| 50    | 5.6 mins         |
+| 15    | 1/8 secs         |
+| 20    | 0.7 secs         |
+| 25    | 3 secs           |
+| 30    | 7 secs           |
+| 35    | 14 secs          |
+| 40    | 0.8 mins         |
+| 45    | 1.25 mins        |
+| 50    | 2 mins           |
+| 60    | 5.2 mins         |
 
 
 

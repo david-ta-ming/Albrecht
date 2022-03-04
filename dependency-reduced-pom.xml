@@ -4,7 +4,7 @@
   <groupId>net.noisynarwhal</groupId>
   <artifactId>albrecht</artifactId>
   <name>Albrecht</name>
-  <version>4.0.1</version>
+  <version>5.0.0</version>
   <build>
     <resources>
       <resource>

@@ -23,7 +23,7 @@ public class Magic {
     private final int[][] values;
     private final int score;
     private final int maxScore;
-    private final int hashCode;
+
     private final boolean isSemiMagic;
     private final boolean isMagic;
     /**
@@ -61,7 +61,7 @@ public class Magic {
 
         }
 
-        return new Magic(values);
+        return new Magic(values, false);
     }
 
     /**
@@ -82,7 +82,7 @@ public class Magic {
             }
         }
 
-        return new Magic(values);
+        return new Magic(values, false);
     }
 
     /**
@@ -95,72 +95,74 @@ public class Magic {
      *
      * @param values
      */
-    private Magic(int[][] values) {
+    private Magic(int[][] values, boolean parentSemiMagic) {
 
         this.values = values;
         this.order = values.length;
 
-        int hash = 7;
+        this.maxScore = this.order + this.order + 2;
+
         int scoreSum = 0;
         final int magicSum = this.order * (this.order * this.order + 1) / 2;
 
-        /**
-         * Score of left-to-right diagonal
-         */
-        int sumlr = 0;
-        /**
-         * Score of right-to-left diagonal
-         */
-        int sumrl = 0;
-        for (int i = 0; i < this.order; i++) {
-            /**
-             * Score of rows
-             */
-            int sumRow = 0;
-            /**
-             * Score of cols
-             */
-            int sumCol = 0;
+        if (parentSemiMagic) {
 
-            for (int j = 0; j < this.order; j++) {
-                sumRow += this.values[i][j];
-                sumCol += this.values[j][i];
+            scoreSum = this.maxScore - 2;
 
-                hash = (hash << 5) | (hash >>> 27);
-                hash += this.values[i][j];
+        } else {
+
+            for (int i = 0; i < this.order; i++) {
+                /**
+                 * Score of rows
+                 */
+                int sumRow = 0;
+                /**
+                 * Score of cols
+                 */
+                int sumCol = 0;
+
+                for (int j = 0; j < this.order; j++) {
+                    sumRow += this.values[i][j];
+                    sumCol += this.values[j][i];
+                }
+
+                if (magicSum == sumRow) {
+                    scoreSum++;
+                } else {
+                    this.openRows.add(i);
+                }
+                if (magicSum == sumCol) {
+                    scoreSum++;
+                } else {
+                    this.openCols.add(i);
+                }
             }
 
-            if (magicSum == sumRow) {
-                scoreSum++;
-            } else {
-                this.openRows.add(i);
-            }
-            if (magicSum == sumCol) {
-                scoreSum++;
-            } else {
-                this.openCols.add(i);
-            }
-
-            sumlr += this.values[i][i];
-            sumrl += this.values[i][this.order - 1 - i];
         }
-
-        this.maxScore = this.order + this.order + 2;
 
         this.isSemiMagic = (scoreSum == this.maxScore - 2);
 
-        /**
-         * Don't consider the diagonals until the square is semi-magic. Also,
-         * only accept the diagonals if they simultaneously sum to the magic
-         * constant.
-         */
-        if (this.isSemiMagic && magicSum == sumlr && magicSum == sumrl) {
-            scoreSum = this.maxScore;
+        if (this.isSemiMagic) {
+            /**
+             * Score of left-to-right diagonal
+             */
+            int sumlr = 0;
+            /**
+             * Score of right-to-left diagonal
+             */
+            int sumrl = 0;
+            for (int i = 0; i < this.order; i++) {
+
+                sumlr += this.values[i][i];
+                sumrl += this.values[i][this.order - 1 - i];
+            }
+
+            if (magicSum == sumlr && magicSum == sumrl) {
+                scoreSum = this.maxScore;
+            }
         }
 
         this.score = scoreSum;
-
-        this.hashCode = hash;
 
         this.isMagic = scoreSum == this.maxScore;
 
@@ -254,7 +256,7 @@ public class Magic {
 
         }
 
-        final Magic child = new Magic(childValues);
+        final Magic child = new Magic(childValues, this.isSemiMagic);
 
         return child;
     }
@@ -311,7 +313,13 @@ public class Magic {
 
     @Override
     public int hashCode() {
-        return this.hashCode;
+        int hash = 7;
+        for (final int v : this.values[0]) {
+            hash = (hash << 5) | (hash >>> 27);
+            hash += v;
+        }
+
+        return hash;
     }
 
     @Override
