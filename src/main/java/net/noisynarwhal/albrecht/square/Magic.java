@@ -94,8 +94,10 @@ public class Magic {
      * instantiate a new instance using a copy of the passed values matrix.
      *
      * @param values
+     * @param isSemiMagic true if this instance is known to be at least be
+     * semi-magic (used as an optimization to shortcut calculations)
      */
-    private Magic(int[][] values, boolean parentSemiMagic) {
+    private Magic(int[][] values, boolean isSemiMagic) {
 
         this.values = values;
         this.order = values.length;
@@ -105,7 +107,7 @@ public class Magic {
         int scoreSum = 0;
         final int magicSum = this.order * (this.order * this.order + 1) / 2;
 
-        if (parentSemiMagic) {
+        if (isSemiMagic) {
 
             scoreSum = this.maxScore - 2;
 
@@ -174,6 +176,8 @@ public class Magic {
      */
     public Magic newChild() {
 
+        final Magic child;
+
         final int[][] childValues = Matrices.copy(this.values);
 
         /**
@@ -208,6 +212,11 @@ public class Magic {
 
                 Matrices.switchCols(childValues, c1, c2);
             }
+
+            /**
+             * This child is known to be at least semi-magic
+             */
+            child = new Magic(childValues, true);
 
         } else {
 
@@ -254,9 +263,11 @@ public class Magic {
 
             }
 
+            /**
+             * This child may or may not be semi-magic
+             */
+            child = new Magic(childValues, false);
         }
-
-        final Magic child = new Magic(childValues, this.isSemiMagic);
 
         return child;
     }
@@ -311,12 +322,21 @@ public class Magic {
         return this.isMagic;
     }
 
+    /**
+     * Performs a cyclic shift hash code of the values in this instance
+     *
+     * @return
+     */
     @Override
     public int hashCode() {
+
         int hash = 7;
-        for (final int v : this.values[0]) {
-            hash = (hash << 5) | (hash >>> 27);
-            hash += v;
+
+        for (final int[] row : this.values) {
+            for (final int v : row) {
+                hash = (hash << 5) | (hash >>> 27);
+                hash += v;
+            }
         }
 
         return hash;
