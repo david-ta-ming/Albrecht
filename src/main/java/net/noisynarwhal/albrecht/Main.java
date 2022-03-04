@@ -32,7 +32,7 @@ import org.apache.commons.cli.DefaultParser;
 public class Main {
 
     public static final Properties PROJECT = new Properties();
-    private static final int NUM_THREADS = Math.max(2, Runtime.getRuntime().availableProcessors() / 2);
+    private static final int NUM_THREADS = Math.max(1, Runtime.getRuntime().availableProcessors() / 2);
     private static final org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(Main.class.getName());
 
     static {
