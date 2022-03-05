@@ -1,6 +1,6 @@
 # Albrecht
 
-Albrecht utilizes a fast evolutionary algorithm to generate magic squares of any order.
+Albrecht utilizes a fast evolutionary algorithm to generate random magic squares of any order.
 
 
 
