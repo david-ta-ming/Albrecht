@@ -5,8 +5,6 @@
  */
 package net.noisynarwhal.albrecht.square;
 
-import java.io.Reader;
-import java.io.Writer;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -182,6 +180,18 @@ public class MatricesTest {
     public void testSwitchRows() {
         System.out.println("switchRows");
 
+    }
+
+    /**
+     * Test of isBiMagic method, of class Matrices.
+     */
+    @Test
+    public void testIsBiMagic() {
+        System.out.println("isBiMagic");
+        int[][] matrix = new int[][]{{17, 36, 55, 124, 62, 114}, {58, 40, 129, 50, 111, 20}, {108, 135, 34, 44, 38, 49}, {87, 98, 92, 102, 1, 28}, {116, 25, 86, 7, 96, 78}, {22, 74, 12, 81, 100, 119}};
+        boolean expResult = true;
+        boolean result = Matrices.isBiMagic(matrix);
+        assertEquals(expResult, result);
     }
 
 }

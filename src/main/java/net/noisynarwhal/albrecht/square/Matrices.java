@@ -51,11 +51,12 @@ public class Matrices {
 
     /**
      * Modify the passed matrix such that the two specified values are switched
+     *
      * @param matrix
      * @param r1
      * @param c1
      * @param r2
-     * @param c2 
+     * @param c2
      */
     public static void switchValues(final int[][] matrix, int r1, int c1, int r2, int c2) {
 
@@ -111,7 +112,6 @@ public class Matrices {
      */
     public static int[][] transpose(int[][] square) {
 
-        
         final int[][] sq = Matrices.copy(square);
 
         for (int i = 0; i < sq.length; i++) {
@@ -373,11 +373,8 @@ public class Matrices {
     }
 
     /**
-     * A manual verification that a matrix is a magic square. This is not needed
-     * (or used) by the class {@link net.noisynarwhal.albrecht.square.Magic}.
-     * The Magic class uses a more optimized version of this method
-     * implementation. Rather, this method serves as an alternative way to
-     * double-check results.
+     * Tests the sum of rows, columns, and diagonals for equality. This does not
+     * check that the values are distinct or consecutive.
      *
      * @param matrix
      * @return
@@ -386,14 +383,30 @@ public class Matrices {
 
         for (final int[] row : matrix) {
             if (row.length != matrix.length) {
-                throw new IllegalArgumentException("Matrix is not an n*n square");
+                throw new IllegalArgumentException("Matrix is not an N*N square");
             }
         }
 
         final int order = matrix.length;
-        final int magicSum = order * (order * order + 1) / 2;
 
-        for (final int[] row : matrix) {
+        /**
+         * Assign magic sum as sum of first row
+         */
+        final int magicSum;
+        {
+            int sumRow = 0;
+            for (final int v : matrix[0]) {
+                sumRow += v;
+            }
+            magicSum = sumRow;
+        }
+
+        /**
+         * Test sum of rows
+         */
+        for (int r = 1; r < order; r++) {
+            final int[] row = matrix[r];
+
             int sumRow = 0;
             for (int c = 0; c < row.length; c++) {
                 sumRow += row[c];
@@ -403,6 +416,9 @@ public class Matrices {
             }
         }
 
+        /**
+         * Test sum of columns
+         */
         for (int c = 0; c < order; c++) {
             int sumCol = 0;
             for (int r = 0; r < order; r++) {
@@ -413,26 +429,52 @@ public class Matrices {
             }
         }
 
+        /**
+         * Test sum of left to right diagonal
+         */
         {
-            int sumrl = 0;
+            int sumDiag = 0;
             for (int i = 0; i < order; i++) {
-                sumrl += matrix[i][i];
+                sumDiag += matrix[i][i];
             }
-            if (magicSum != sumrl) {
+            if (magicSum != sumDiag) {
                 return false;
             }
         }
 
+        /**
+         * Test sum of right to left diagonal
+         */
         {
-            int sumlr = 0;
+            int sumDiag = 0;
             for (int i = 0; i < order; i++) {
-                sumlr += matrix[i][order - 1 - i];
+                sumDiag += matrix[i][order - 1 - i];
             }
-            if (magicSum != sumlr) {
+            if (magicSum != sumDiag) {
                 return false;
             }
         }
 
         return true;
     }
+
+    /**
+     * Tests whether a square is bi-magic
+     *
+     * @param matrix
+     * @return
+     */
+    public static boolean isBiMagic(int[][] matrix) {
+
+        matrix = Matrices.copy(matrix);
+
+        for (final int[] row : matrix) {
+            for (int c = 0; c < row.length; c++) {
+                row[c] = row[c] * row[c];
+            }
+        }
+
+        return Matrices.isMagic(matrix);
+    }
+
 }
