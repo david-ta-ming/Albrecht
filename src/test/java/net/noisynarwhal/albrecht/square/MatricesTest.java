@@ -188,10 +188,26 @@ public class MatricesTest {
     @Test
     public void testIsBiMagic() {
         System.out.println("isBiMagic");
-        int[][] matrix = new int[][]{{17, 36, 55, 124, 62, 114}, {58, 40, 129, 50, 111, 20}, {108, 135, 34, 44, 38, 49}, {87, 98, 92, 102, 1, 28}, {116, 25, 86, 7, 96, 78}, {22, 74, 12, 81, 100, 119}};
-        boolean expResult = true;
-        boolean result = Matrices.isBiMagic(matrix);
-        assertEquals(expResult, result);
+        {
+            int[][] matrix = new int[][]{{17, 36, 55, 124, 62, 114}, {58, 40, 129, 50, 111, 20}, {108, 135, 34, 44, 38, 49}, {87, 98, 92, 102, 1, 28}, {116, 25, 86, 7, 96, 78}, {22, 74, 12, 81, 100, 119}};
+            boolean expResult = true;
+            boolean result = Matrices.isBiMagic(matrix);
+            assertEquals(expResult, result);
+        }
+        {
+            int[][] matrix = new int[][]{
+                {23, 30, 14, 37, 44, 10, 17},
+                {27, 45, 8, 18, 9, 46, 22},
+                {1, 19, 16, 41, 28, 34, 36},
+                {32, 20, 49, 13, 3, 47, 11},
+                {21, 25, 7, 26, 43, 5, 48},
+                {31, 24, 39, 2, 15, 29, 35},
+                {40, 12, 42, 38, 33, 4, 6}
+            };
+            boolean expResult = false;
+            boolean result = Matrices.isBiMagic(matrix);
+            assertEquals(expResult, result);
+        }
     }
 
 }

@@ -21,6 +21,8 @@ import net.noisynarwhal.albrecht.square.Matrices;
  */
 public class Benchmark {
 
+    private final static boolean REPORT = true;
+
     /**
      * Run a number of evolutions and calculate average number of evolution
      * times in units of successes per second.
@@ -30,10 +32,12 @@ public class Benchmark {
      */
     public static void main(String[] args) throws Exception {
 
-        final int order = args.length > 0 ? Integer.parseInt(args[0]) : 15;
-        final int numTrials = args.length > 1 ? Integer.parseInt(args[1]) : 50;
+        final int order = args.length > 0 ? Integer.parseInt(args[0]) : 9;
+        final int numTrials = args.length > 1 ? Integer.parseInt(args[1]) : 1500;
 
         final List<Long> times = new ArrayList<>();
+        
+        System.out.println("Running benchmark order " + Integer.toString(order) + "...");
 
         for (int i = 0; i < numTrials; i++) {
 
@@ -51,34 +55,44 @@ public class Benchmark {
                 break;
             }
 
+            if (Matrices.isBiMagic(magic.getValues())) {
+                System.out.println("Bi-Magic");
+                System.out.println(Matrices.print(magic.getValues()));
+                break;
+            }
+
             times.add(elapsed);
 
-            final StringBuilder sb = new StringBuilder();
+            if (REPORT) {
+                
+                final StringBuilder sb = new StringBuilder();
 
-            final long elapsedSecs = TimeUnit.SECONDS.convert(elapsed, TimeUnit.NANOSECONDS);
+                final long elapsedSecs = TimeUnit.SECONDS.convert(elapsed, TimeUnit.NANOSECONDS);
 
-            if (elapsedSecs > 1) {
+                if (elapsedSecs > 1) {
 
-                sb.append(Long.toString(elapsedSecs));
-                sb.append(" secs");
+                    sb.append(Long.toString(elapsedSecs));
+                    sb.append(" secs");
 
-            } else {
+                } else {
 
-                final long elapsedMs = TimeUnit.MILLISECONDS.convert(elapsed, TimeUnit.NANOSECONDS);
+                    final long elapsedMs = TimeUnit.MILLISECONDS.convert(elapsed, TimeUnit.NANOSECONDS);
 
-                final long stars = (elapsedMs / 50) + 1;
+                    final long stars = (elapsedMs / 50) + 1;
 
-                for (int j = 1; j <= stars; j++) {
-                    if (j % 3 == 0) {
-                        sb.append(Integer.toString(j));
-                    } else {
-                        sb.append('*');
+                    for (int j = 1; j <= stars; j++) {
+                        if (j % 3 == 0) {
+                            sb.append(Integer.toString(j));
+                        } else {
+                            sb.append('*');
+                        }
                     }
+
                 }
-
+                
+                System.out.println(Integer.toString(i) + ": " + sb.toString());
+                
             }
-            System.out.println(Integer.toString(i) + ": " + sb.toString());
-
         }
 
         Collections.sort(times);
