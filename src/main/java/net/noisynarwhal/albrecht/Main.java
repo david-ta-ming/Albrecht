@@ -105,7 +105,7 @@ public class Main {
             @Override
             public void report(Magic magic) {
 
-                if (reportFreq > 0 && ThreadLocalRandom.current().nextDouble() < 0.00001
+                if (reportFreq > 0 && ThreadLocalRandom.current().nextDouble() < 0.00001D
                         && TimeUnit.SECONDS.convert(System.nanoTime() - this.lastReport.get(), TimeUnit.NANOSECONDS) >= reportFreq) {
 
                     final long elapsed = System.nanoTime() - this.start;
