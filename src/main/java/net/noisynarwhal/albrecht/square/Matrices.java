@@ -476,5 +476,41 @@ public class Matrices {
 
         return Matrices.isMagic(matrix);
     }
+    
+    /**
+     * Tests a matrix for unique consecutive values starting at a specified valued
+     * @param matrix
+     * @param first
+     * @return 
+     */
+    public static boolean isConsecutiveUnique(int[][] matrix, int first) {
+        
+        final SortedSet<Integer> values = new TreeSet<>();
+        
+        for (final int[] row : matrix) {
+            for(final int v : row) {
+                
+                final boolean unique = values.add(v);
+                
+                if(!unique) {
+                    return false;
+                }
+                
+            }
+        }
+        
+        int i = first;
+        for(final int v : values) {
+            
+            final boolean consecutive = v == i++;
+            
+            if(!consecutive) {
+                return false;
+            }
+            
+        }
+        
+        return true;
+    }
 
 }

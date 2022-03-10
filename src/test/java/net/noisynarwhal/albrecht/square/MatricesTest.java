@@ -189,7 +189,14 @@ public class MatricesTest {
     public void testIsBiMagic() {
         System.out.println("isBiMagic");
         {
-            int[][] matrix = new int[][]{{17, 36, 55, 124, 62, 114}, {58, 40, 129, 50, 111, 20}, {108, 135, 34, 44, 38, 49}, {87, 98, 92, 102, 1, 28}, {116, 25, 86, 7, 96, 78}, {22, 74, 12, 81, 100, 119}};
+            int[][] matrix = new int[][]{
+                {17, 36, 55, 124, 62, 114},
+                {58, 40, 129, 50, 111, 20},
+                {108, 135, 34, 44, 38, 49},
+                {87, 98, 92, 102, 1, 28},
+                {116, 25, 86, 7, 96, 78},
+                {22, 74, 12, 81, 100, 119}
+            };
             boolean expResult = true;
             boolean result = Matrices.isBiMagic(matrix);
             assertEquals(expResult, result);
@@ -208,6 +215,70 @@ public class MatricesTest {
             boolean result = Matrices.isBiMagic(matrix);
             assertEquals(expResult, result);
         }
+        {
+            int[][] matrix = new int[][]{
+                {1, 2, 37, 43, 40, 52, 47, 38},
+                {62, 15, 12, 13, 27, 32, 41, 58},
+                {14, 35, 30, 28, 24, 63, 7, 59},
+                {25, 54, 53, 48, 5, 22, 44, 9},
+                {34, 31, 51, 39, 60, 3, 6, 36},
+                {49, 50, 10, 21, 20, 45, 57, 8},
+                {29, 18, 56, 4, 61, 17, 42, 33},
+                {46, 55, 11, 64, 23, 26, 16, 19}
+            };
+
+            boolean expResult = true;
+            boolean result = Matrices.isBiMagic(matrix);
+            assertEquals(expResult, result);
+        }
+    }
+
+    /**
+     * Test of isConsecutiveUnique method, of class Matrices.
+     */
+    @Test
+    public void testIsConsecutiveUnique() {
+        System.out.println("isConsecutiveUnique");
+        {
+            int[][] matrix = new int[][]{
+                {1, 2, 37, 43, 40, 52, 47, 38},
+                {62, 15, 12, 13, 27, 32, 41, 58},
+                {14, 35, 30, 28, 24, 63, 7, 59},
+                {25, 54, 53, 48, 5, 22, 44, 9},
+                {34, 31, 51, 39, 60, 3, 6, 36},
+                {49, 50, 10, 21, 20, 45, 57, 8},
+                {29, 18, 56, 4, 61, 17, 42, 33},
+                {46, 55, 11, 64, 23, 26, 16, 19}
+            };
+            boolean expResult = true;
+            boolean result = Matrices.isConsecutiveUnique(matrix, 1);
+            assertEquals(expResult, result);
+        }
+        {
+            int[][] matrix = new int[][]{{0, 1, 2}, {3, 4, 5}, {6, 7, 8}};
+            boolean expResult = true;
+            boolean result = Matrices.isConsecutiveUnique(matrix, 0);
+            assertEquals(expResult, result);
+        }
+        {
+            int[][] matrix = new int[][]{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
+            boolean expResult = false;
+            boolean result = Matrices.isConsecutiveUnique(matrix, 0);
+            assertEquals(expResult, result);
+        }
+        {
+            int[][] matrix = new int[][]{{1, 1, 3}, {4, 5, 6}, {7, 8, 9}};
+            boolean expResult = false;
+            boolean result = Matrices.isConsecutiveUnique(matrix, 1);
+            assertEquals(expResult, result);
+        }
+        {
+            int[][] matrix = new int[][]{{0, 2, 3}, {4, 5, 6}, {7, 8, 9}};
+            boolean expResult = false;
+            boolean result = Matrices.isConsecutiveUnique(matrix, 0);
+            assertEquals(expResult, result);
+        }
+
     }
 
 }
