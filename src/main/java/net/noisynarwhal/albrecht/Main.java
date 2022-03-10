@@ -72,7 +72,8 @@ public class Main {
                 throw new RuntimeException("Invalid directory path: '" + saveDir.getAbsolutePath() + '\'');
             }
 
-            Main.run(order, saveDir, reportFreq);
+            final Magic magicStart = Magic.build(order);
+            Main.run(magicStart, saveDir, reportFreq);
 
         } catch (Throwable th) {
 
@@ -84,9 +85,11 @@ public class Main {
         System.exit(0);
     }
 
-    private static Magic run(final int order, final File saveDir, final int reportFreq) throws Exception {
+    private static Magic run(final Magic magicStart, final File saveDir, final int reportFreq) throws Exception {
 
         final Magic magic;
+
+        final int order = magicStart.getOrder();
 
         System.out.println("\n\n");
         System.out.println("Version " + PROJECT.getProperty("version"));
@@ -97,7 +100,7 @@ public class Main {
 
         final long start = System.nanoTime();
 
-        magic = Evolutions.evolve(order, NUM_THREADS, new DefaultEvolutionMonitor() {
+        magic = Evolutions.evolve(magicStart, NUM_THREADS, new DefaultEvolutionMonitor() {
             private final long start = System.nanoTime();
             private final AtomicLong lastReport = new AtomicLong(System.nanoTime());
             private final AtomicInteger highScore = new AtomicInteger(0);

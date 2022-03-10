@@ -28,22 +28,26 @@ public class Evolutions {
      * @return
      */
     public static Magic evolve(int order) {
-        return Evolutions.evolve(order, new DefaultEvolutionManager(), new DefaultEvolutionManager());
+        final Magic magic = Magic.build(order);
+        return Evolutions.evolve(magic, null, null);
     }
 
-    /**
-     *
-     * @param order
-     * @param monitor
-     * @return
-     */
-    public static Magic evolve(int order, EvolutionMonitor monitor) {
-        return Evolutions.evolve(order, monitor, new DefaultEvolutionManager());
+    public static Magic evolve(Magic magic, EvolutionMonitor monitor) {
+
+        return Evolutions.evolve(magic, monitor, null);
     }
 
-    private static Magic evolve(int order, EvolutionMonitor monitor, EvolutionManager manager) {
+    private static Magic evolve(Magic magic, EvolutionMonitor monitor, EvolutionManager manager) {
 
-        Magic magic = Magic.build(order);
+        magic = Magic.build(magic.getValues());
+
+        if (monitor == null) {
+            monitor = new DefaultEvolutionMonitor();
+        }
+
+        if (manager == null) {
+            manager = new DefaultEvolutionManager();
+        }
 
         manager.onStart(magic);
         monitor.onStart(magic);
@@ -68,12 +72,12 @@ public class Evolutions {
 
     /**
      *
-     * @param order
+     * @param start
      * @param numThreads
      * @param monitor
      * @return
      */
-    public static Magic evolve(int order, int numThreads, EvolutionMonitor monitor) {
+    public static Magic evolve(Magic start, int numThreads, EvolutionMonitor monitor) {
 
         final List<Future<Magic>> promises = new ArrayList<>();
 
@@ -83,7 +87,7 @@ public class Evolutions {
 
             for (int i = 0; i < numThreads; i++) {
 
-                final Callable<Magic> thread = new Evolution(order, monitor);
+                final Callable<Magic> thread = new Evolution(start, monitor);
 
                 final Future<Magic> promise = threadService.submit(thread);
 
@@ -112,13 +116,13 @@ public class Evolutions {
 
     private static class Evolution implements Callable<Magic>, EvolutionManager {
 
-        private final int order;
+        private final Magic start;
         private final EvolutionMonitor monitor;
 
         private static final AtomicBoolean FINISHED = new AtomicBoolean(false);
 
-        public Evolution(int order, EvolutionMonitor monitor) {
-            this.order = order;
+        public Evolution(Magic start, EvolutionMonitor monitor) {
+            this.start = start;
             this.monitor = monitor;
         }
 
@@ -127,9 +131,7 @@ public class Evolutions {
 
             try {
 
-                Magic magic = Evolutions.evolve(this.order, this.monitor, this);
-
-                return magic;
+                return Evolutions.evolve(this.start, this.monitor, this);
 
             } catch (Exception ex) {
                 System.err.println(ex.getMessage());
