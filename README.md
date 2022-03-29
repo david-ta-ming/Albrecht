@@ -59,4 +59,4 @@ The Albrecht algorithm is fundamentally stochastic, therefore individual runtime
 
 ## Results
 
-Examples of discovered magic squares up to order 101 may be found in the folder [examples](https://github.com/david-ta-ming/Albrecht/tree/main/examples).
+Examples of discovered magic squares up to **order 125** may be found in the folder [examples](https://github.com/david-ta-ming/Albrecht/tree/main/examples).
