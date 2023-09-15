@@ -30,8 +30,8 @@ public class Benchmark {
      */
     public static void main(String[] args) throws Exception {
 
-        final int order = args.length > 0 ? Integer.parseInt(args[0]) : 9;
-        final int numTrials = args.length > 1 ? Integer.parseInt(args[1]) : 1500;
+        final int order = args.length > 0 ? Integer.parseInt(args[0]) : 15;
+        final int numTrials = args.length > 1 ? Integer.parseInt(args[1]) : 15;
 
         final List<Long> times = new ArrayList<>();
 

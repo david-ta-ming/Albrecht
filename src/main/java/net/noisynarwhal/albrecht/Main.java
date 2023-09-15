@@ -93,6 +93,7 @@ public class Main {
 
         System.out.println("\n\n");
         System.out.println("Version " + PROJECT.getProperty("version"));
+        System.out.println("Num threads " + Integer.toString(NUM_THREADS));
         System.out.println("Searching...");
         System.out.println(new Date());
         System.out.println("Searching...");

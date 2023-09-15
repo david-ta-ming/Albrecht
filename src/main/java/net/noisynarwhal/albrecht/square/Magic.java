@@ -26,6 +26,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public class Magic {
 
     private final Random RANDOM = ThreadLocalRandom.current();
+    private final int magicSum;
     private final int order;
     private final int[][] values;
     private final int score;
@@ -109,14 +110,17 @@ public class Magic {
         this.values = values;
         this.order = values.length;
 
+        this.magicSum = this.order * (this.order * this.order + 1) / 2;
+
         this.maxScore = this.order + this.order + 2;
 
         int scoreSum = 0;
-        final int magicSum = this.order * (this.order * this.order + 1) / 2;
 
         if (isSemiMagic) {
 
             scoreSum = this.maxScore - 2;
+
+            this.isSemiMagic = true;
 
         } else {
 
@@ -147,9 +151,8 @@ public class Magic {
                 }
             }
 
+            this.isSemiMagic = (scoreSum == this.maxScore - 2);
         }
-
-        this.isSemiMagic = (scoreSum == this.maxScore - 2);
 
         if (this.isSemiMagic) {
             /**
@@ -193,33 +196,67 @@ public class Magic {
          */
         if (this.isSemiMagic) {
 
-            if (RANDOM.nextBoolean()) {
-                /**
-                 * Row exchange
-                 */
-                int r1;
-                int r2;
-
-                do {
-                    r1 = RANDOM.nextInt(this.order);
-                    r2 = RANDOM.nextInt(this.order);
-                } while (r1 == r2);
-
-                Matrices.switchRows(childValues, r1, r2);
-            } else {
-                /**
-                 * Col exchange
-                 */
-                int c1;
-                int c2;
-
-                do {
-                    c1 = RANDOM.nextInt(this.order);
-                    c2 = RANDOM.nextInt(this.order);
-                } while (c1 == c2);
-
-                Matrices.switchCols(childValues, c1, c2);
+            /**
+             * Sum the diagonals, keep the new values if it is closer to 2 *
+             * magic sum
+             */
+            int sumDiagsStart = 0;
+            for (int j = 0; j < this.order; j++) {
+                sumDiagsStart += childValues[j][j];
+                sumDiagsStart += childValues[j][this.order - 1 - j];
             }
+
+            final int diffStart = Math.abs((2 * this.magicSum) - sumDiagsStart);
+
+            int sumDiagsEnd = sumDiagsStart;
+            int diffEnd;
+
+            do {
+
+                if (RANDOM.nextBoolean()) {
+                    /**
+                     * Row exchange
+                     */
+                    int r1;
+                    int r2;
+
+                    do {
+                        r1 = RANDOM.nextInt(this.order);
+                        r2 = RANDOM.nextInt(this.order);
+                    } while (r1 == r2);
+
+                    sumDiagsEnd -= (childValues[r1][r1] + childValues[r1][this.order - 1 - r1]);
+                    sumDiagsEnd -= (childValues[r2][r2] + childValues[r2][this.order - 1 - r2]);
+
+                    Matrices.switchRows(childValues, r1, r2);
+
+                    sumDiagsEnd += (childValues[r1][r1] + childValues[r1][this.order - 1 - r1]);
+                    sumDiagsEnd += (childValues[r2][r2] + childValues[r2][this.order - 1 - r2]);
+
+                } else {
+                    /**
+                     * Col exchange
+                     */
+                    int c1;
+                    int c2;
+
+                    do {
+                        c1 = RANDOM.nextInt(this.order);
+                        c2 = RANDOM.nextInt(this.order);
+                    } while (c1 == c2);
+
+                    sumDiagsEnd -= (childValues[c1][c1] + childValues[this.order - 1 - c1][c1]);
+                    sumDiagsEnd -= (childValues[c2][c2] + childValues[this.order - 1 - c2][c2]);
+
+                    Matrices.switchCols(childValues, c1, c2);
+
+                    sumDiagsEnd += (childValues[c1][c1] + childValues[this.order - 1 - c1][c1]);
+                    sumDiagsEnd += (childValues[c2][c2] + childValues[this.order - 1 - c2][c2]);
+                }
+
+                diffEnd = Math.abs((2 * this.magicSum) - sumDiagsEnd);
+
+            } while (diffEnd > diffStart);
 
             /**
              * This child is known to be at least semi-magic
