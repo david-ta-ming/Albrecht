@@ -24,8 +24,6 @@ hs_err_pid*
 
 target/*
 
-!target/albrecht.jar
-
 nbactions.xml
 nbproject/
 .DS_Store
