@@ -6,6 +6,7 @@
 package net.noisynarwhal.albrecht.square;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -139,12 +140,12 @@ public class Magic {
                     sumCol += this.values[j][i];
                 }
 
-                if (magicSum == sumRow) {
+                if (this.magicSum == sumRow) {
                     scoreSum++;
                 } else {
                     this.openRows.add(i);
                 }
-                if (magicSum == sumCol) {
+                if (this.magicSum == sumCol) {
                     scoreSum++;
                 } else {
                     this.openCols.add(i);
@@ -278,31 +279,41 @@ public class Magic {
 
             if (openRowSwap) {
 
-                Collections.shuffle(this.openRows, RANDOM);
+                final int size = this.openRows.size();
+                final int idx1 = RANDOM.nextInt(size);
+                int idx2;
+                do {
+                    idx2 = RANDOM.nextInt(size);
+                } while (idx2 == idx1);
 
                 /**
                  * Value exchange
                  */
-                final int r1 = this.openRows.get(0);
+                final int r1 = this.openRows.get(idx1);
                 final int c1 = RANDOM.nextInt(this.order);
 
-                final int r2 = this.openRows.get(1);
+                final int r2 = this.openRows.get(idx2);
                 final int c2 = RANDOM.nextInt(this.order);
 
                 Matrices.switchValues(childValues, r1, c1, r2, c2);
 
             } else {
 
-                Collections.shuffle(this.openCols, RANDOM);
+                final int size = this.openCols.size();
+                final int idx1 = RANDOM.nextInt(size);
+                int idx2;
+                do {
+                    idx2 = RANDOM.nextInt(size);
+                } while (idx2 == idx1);
 
                 /**
                  * Value exchange
                  */
                 final int r1 = RANDOM.nextInt(this.order);
-                final int c1 = this.openCols.get(0);
+                final int c1 = this.openCols.get(idx1);
 
                 final int r2 = RANDOM.nextInt(this.order);
-                final int c2 = this.openCols.get(1);
+                final int c2 = this.openCols.get(idx2);
 
                 Matrices.switchValues(childValues, r1, c1, r2, c2);
 
