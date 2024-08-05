@@ -18,7 +18,7 @@ Albrecht utilizes a fast evolutionary algorithm to generate random magic squares
 
    ```bash
    git clone https://github.com/david-ta-ming/Albrecht.git
-   cd lbrecht
+   cd Albrecht
    ```
 
 2. Build the project using Maven:
@@ -42,14 +42,9 @@ java -jar target/albrecht.jar [options]
 ### Options
 
 - `-o, --order <n>`: Set the order of the magic square (default: 30)
-
 - `-d, --dir <path>`: Specify the output directory (default: current directory)
-
 - `-r, --report <seconds>`: Set the frequency of progress reports in seconds
-
 - `-h, --help`: Display help information
-
-  
 
 ### Examples
 
