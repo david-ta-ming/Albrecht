@@ -28,3 +28,7 @@ nbactions.xml
 nbproject/
 .DS_Store
 ~$*
+
+repopack-output.txt
+
+.idea/
